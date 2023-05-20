@@ -1,5 +1,6 @@
 package tetris.view;
 
+import tetris.controller.LauncherController;
 import tetris.model.GameLauncher;
 import static tetris.resource.ResourceManager.*;
 
@@ -25,16 +26,22 @@ public class LauncherView extends JFrame {
 
     public static GamePanel gamePanel;
     public GameLauncher gameLauncher;
+    private LauncherController launcherController;
     private RegistrationPanel registrationPanel;
     private UserProfilePanel userProfilePanel;
 
-    public LauncherView(GameLauncher gameLauncher){
+    private ChooseGameModePanel chooseGameModePanel;
+
+    public LauncherView(GameLauncher gameLauncher, LauncherController launcherController){
         this.gameLauncher = gameLauncher;
+        this.launcherController = launcherController;
 
         gamePanel = new GamePanel(gameLauncher);
         gamePanel.setBackImage(getImg("background6.jpg"));
 
         menuPause = new MenuPause(gameLauncher);
+
+        chooseGameModePanel = new ChooseGameModePanel(gameLauncher, launcherController);
 
         chooseLevelPanel = new ChooseLevelPanel(gameLauncher);
 
@@ -113,7 +120,7 @@ public class LauncherView extends JFrame {
 
         inter.setLayout(new BorderLayout());
 
-        tabbedPane.addTab("   Home", getImg("home1.png", 40, 40), chooseLevelPanel);
+        tabbedPane.addTab("   Home", getImg("home1.png", 40, 40), chooseGameModePanel);
         tabbedPane.addTab("   Option", getImg("option.png", 40, 40), option);
         tabbedPane.addTab("   About-me", getImg("about-me.png", 40, 40), aboutMeInfoPanel);
         tabbedPane.addTab("   High Scores", getImg("high-scores.png", 40, 40), highScorePanel);
@@ -194,7 +201,19 @@ public class LauncherView extends JFrame {
 
     public void displayLauncherHomepage(){
         userProfilePanel.updateProfilePanel(); //обновляем UI здесь, т.к при вызове этой фунции user в лаунчере всегда инициализироване или обновлен
+        displayChooseGameModePanel();
+    }
+
+    public void displayChooseLevelPanel() {
         tabbedPane.setComponentAt(0, chooseLevelPanel);
+        inter.removeAll();
+        inter.add(tabbedPane);
+        repaint();
+        revalidate();
+    }
+
+    public void displayChooseGameModePanel() {
+        tabbedPane.setComponentAt(0, chooseGameModePanel);
         inter.removeAll();
         inter.add(tabbedPane);
         repaint();

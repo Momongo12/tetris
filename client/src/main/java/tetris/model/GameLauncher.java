@@ -1,6 +1,8 @@
 package tetris.model;
 
 import org.apache.logging.log4j.Logger;
+import tetris.controller.LauncherController;
+import tetris.controller.WebSocketClient;
 import tetris.dataAccessLayer.HighScoreDataAccessObject;
 import tetris.dataAccessLayer.PlayerStatisticsTableDataAccessObject;
 import tetris.logger.MyLoggerFactory;
@@ -14,9 +16,10 @@ import javax.swing.*;
 
 public class GameLauncher {
     private NavigationPanel navigationPanel;
+    private LauncherController launcherController;
     private LauncherView launcherView;
     private GameModel gameModel;
-
+    private WebSocketClient webSocketClient;
     private Player currentPlayer;
 
     private SwingWorker<Void, Void> worker;
@@ -32,7 +35,8 @@ public class GameLauncher {
         gameModel = new GameModel(this);
 
         new LauncherPreview(this);
-        launcherView = new LauncherView(this);
+        launcherController = new LauncherController(this);
+        launcherView = new LauncherView(this, launcherController);
         launcherView.addKeyListener(gameModel.getTetrominoController());
 
         initBackgroundSounds();
@@ -77,6 +81,14 @@ public class GameLauncher {
         LOGGER.info("Game started");
     }
 
+    public void startPvpGame() {
+        if (webSocketClient == null) {
+            System.out.println("попытка подключения к серверу");
+            webSocketClient = new WebSocketClient();
+            webSocketClient.connect("ws://localhost:8080/game");
+        }
+    }
+
     public void stopGame(){
         if (worker != null) {
             arrayOfSounds[soundIndex].stop();
@@ -107,9 +119,9 @@ public class GameLauncher {
         }
         soundIndex = (soundIndex + 1) % arrayOfSounds.length;
 
-        SwingWorker<Void, Void> worker = new SwingWorker<Void, Void>() {
+        SwingWorker<Void, Void> worker = new SwingWorker<>() {
             @Override
-            protected Void doInBackground() throws Exception {
+            protected Void doInBackground() {
                 playPreviewSound(arrayOfSounds[soundIndex]);
                 return null;
             }
