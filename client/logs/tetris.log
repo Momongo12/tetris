@@ -1,0 +1,7 @@
+18:38:36 DEBUG t.m.GameModel [main] Game sounds loaded
+18:38:39 DEBUG t.m.GameLauncher [main] background sounds loaded
+18:38:39 INFO t.m.GameLauncher [main] Launcher started
+18:38:50 INFO t.m.GameLauncher [AWT-EventQueue-0] Player log in
+18:38:59 INFO t.m.GameLauncher [AWT-EventQueue-0] Game started
+18:39:25 INFO t.m.GameLauncher [SwingWorker-pool-2-thread-1] Game stopped
+18:39:26 DEBUG t.m.GameModel [AWT-EventQueue-0] game data refreshed
