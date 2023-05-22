@@ -1,6 +1,7 @@
 package tetris.view;
 
 import tetris.model.GameModel;
+import tetris.model.SoloGameModel;
 import static tetris.resource.ResourceManager.*;
 
 import javax.swing.*;
@@ -18,7 +19,7 @@ public class InfoPanel extends JPanel {
 
     public InfoPanel(GameModel gameModel){
         this.gameModel = gameModel;
-        gameModel.setInfoPanel(this);
+        gameModel.addInfoPanel(this);
 
         JLabel linesBoxLabel = new JLabel();
         linesBoxLabel.setIcon(getImg("linesBackground.png", WIGHT, HEIGHT));
@@ -37,7 +38,7 @@ public class InfoPanel extends JPanel {
         linesTextLabel.setFocusable(false);
         linesTextLabel.setBackground(new Color(0, 0, 0, 0));
         
-        linesLabel = new JLabel("   " + gameModel.getLines());
+        linesLabel = new JLabel("   " + gameModel.getLines(this));
         linesLabel.setFont(new Font("Showcard Gothic", Font.PLAIN, 23));
         linesLabel.setForeground(Color.BLACK);
         linesLabel.setPreferredSize(new Dimension(120, 30));
@@ -69,7 +70,7 @@ public class InfoPanel extends JPanel {
         scoreTextLabel.setFocusable(false);
         scoreTextLabel.setBackground(new Color(0, 0, 0, 0));
 
-        scoreLabel = new JLabel("   " + gameModel.getScore());
+        scoreLabel = new JLabel("   " + gameModel.getScore(this));
         scoreLabel.setFont(new Font("Showcard Gothic", Font.PLAIN, 23));
         scoreLabel.setForeground(Color.BLACK);
         scoreLabel.setPreferredSize(new Dimension(120, 30));
@@ -98,10 +99,10 @@ public class InfoPanel extends JPanel {
     public void paintComponent(Graphics g){
 
         linesLabel.removeAll();
-        linesLabel.setText("   " + gameModel.getLines());
+        linesLabel.setText("   " + gameModel.getLines(this));
 
         scoreLabel.removeAll();
-        scoreLabel.setText("   " + gameModel.getScore());
+        scoreLabel.setText("   " + gameModel.getScore(this));
         super.paintComponent(g);
     }
 

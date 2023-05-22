@@ -1,6 +1,9 @@
 package tetris.view;
 
 import tetris.model.GameModel;
+import tetris.model.SoloGameModel;
+import tetris.model.Tetromino;
+
 import static tetris.resource.ResourceManager.*;
 
 import javax.swing.*;
@@ -15,6 +18,7 @@ public class NextShapePanel extends JLabel {
     private final int offsetXForShape = 10;
     public NextShapePanel(GameModel gameModel){
         this.gameModel = gameModel;
+        gameModel.addNextShapePanel(this);
         setPreferredSize(new Dimension(WIGHT, HEIGHT));
         setSize(getPreferredSize());
         setBackground(new Color(5, 110, 225));
@@ -25,14 +29,17 @@ public class NextShapePanel extends JLabel {
     public void paintComponent(Graphics g){
         super.paintComponent(g);
 
-        boolean[][] tetromino = gameModel.getNextTetromino().getShape();
-        for (int i = 0; i < tetromino.length; i++){
-            for (int j = 0; j < tetromino[i].length; j++){
-                if (tetromino[i][j]){
-                    int x = j * BLOCK_SIZE + offsetXForShape;
-                    int y = i * BLOCK_SIZE + offsetYForShape;
-                    g.setColor(gameModel.getNextTetromino().getColor());
-                    g.fillRect(x, y, BLOCK_SIZE, BLOCK_SIZE);
+        Tetromino nextTetromino = gameModel.getNextTetromino(this);
+        if (nextTetromino != null) {
+            boolean[][] tetrominoShape = nextTetromino.getShape();
+            for (int i = 0; i < tetrominoShape.length; i++){
+                for (int j = 0; j < tetrominoShape[i].length; j++){
+                    if (tetrominoShape[i][j]){
+                        int x = j * BLOCK_SIZE + offsetXForShape;
+                        int y = i * BLOCK_SIZE + offsetYForShape;
+                        g.setColor(gameModel.getNextTetromino(this).getColor());
+                        g.fillRect(x, y, BLOCK_SIZE, BLOCK_SIZE);
+                    }
                 }
             }
         }

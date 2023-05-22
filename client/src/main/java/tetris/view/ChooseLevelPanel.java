@@ -86,11 +86,11 @@ public class ChooseLevelPanel extends JPanel implements ActionListener{
     @Override
     public void actionPerformed(ActionEvent e){
         if (e.getSource() == easyLevelButton){
-            gameLauncher.getGameModel().setGameLevel(1);
+            gameLauncher.getSoloGameModel().setGameLevel(1);
         }else if (e.getSource() == mediumLevelButton){
-            gameLauncher.getGameModel().setGameLevel(2);
+            gameLauncher.getSoloGameModel().setGameLevel(2);
         }else if (e.getSource() == hardLevelButton){
-            gameLauncher.getGameModel().setGameLevel(3);
+            gameLauncher.getSoloGameModel().setGameLevel(3);
         }
         gameLauncher.getLauncherView().displayGamePanel();
     }

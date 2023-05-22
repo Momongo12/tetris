@@ -1,8 +1,11 @@
 package tetris.model;
 
+import lombok.Data;
+
 import java.util.Date;
 import java.util.LinkedHashMap;
 
+@Data
 public class Player {
     private final int playerIdInDB;
     private final String name;
@@ -37,52 +40,4 @@ public class Player {
         numberOfGames++;
         averageScore = (averageScore + currentScore) / numberOfGames;
     }
-
-    public String getName(){ return name; }
-
-    public Date getDateOfRegistation() {
-        return dateOfRegistation;
-    }
-
-    public void setDateOfRegistation(Date dateOfRegistation) {
-        this.dateOfRegistation = dateOfRegistation;
-    }
-
-    public int getNumberOfGames() {
-        return numberOfGames;
-    }
-
-    public void setNumberOfGames(int numberOfGames) {
-        this.numberOfGames = numberOfGames;
-    }
-
-    public int getMaxScore() {
-        return maxScore;
-    }
-
-    public void setMaxScore(int maxScore) {
-        this.maxScore = maxScore;
-    }
-
-    public void setAverageScore(int averageScore) { this.averageScore = averageScore; }
-
-    public int getAverageScore() { return averageScore; }
-
-    public int getMaxLines() {
-        return maxLines;
-    }
-
-    public void setMaxLines(int maxLines) {
-        this.maxLines = maxLines;
-    }
-
-    public int getMaxLevel() {
-        return maxLevel;
-    }
-
-    public void setMaxLevel(int maxLevel) {
-        this.maxLevel = maxLevel;
-    }
-
-    public int getPlayerIdInDB() { return playerIdInDB; }
 }

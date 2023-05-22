@@ -9,7 +9,8 @@ public class LauncherController {
     }
 
     public void handlePvpGameButtonClick() {
-        gameLauncher.startPvpGame();
+        gameLauncher.connectToServer();
+        gameLauncher.displayPvPGameField();
     }
 
     public void handleSoloGameButtonClick() {

@@ -199,6 +199,11 @@ public class LauncherView extends JFrame {
         revalidate();
     }
 
+    public void displayPvPGameMode() {
+        gamePanel.displayPvPGameMode();
+        displayGamePanel();
+    }
+
     public void displayLauncherHomepage(){
         userProfilePanel.updateProfilePanel(); //обновляем UI здесь, т.к при вызове этой фунции user в лаунчере всегда инициализироване или обновлен
         displayChooseGameModePanel();

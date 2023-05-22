@@ -1,6 +1,7 @@
 package tetris.view;
 
 import tetris.model.GameModel;
+import tetris.model.SoloGameModel;
 import static tetris.resource.ResourceManager.*;
 
 import javax.swing.*;
@@ -15,7 +16,8 @@ public class LevelPanel extends JLabel {
 
     public LevelPanel(GameModel gameModel){
         this.gameModel = gameModel;
-        levelLabel = new JLabel("   " + gameModel.getLevel());
+        gameModel.addLevelPanel(this);
+        levelLabel = new JLabel("   " + gameModel.getLevel(this));
         levelLabel.setFont(new Font("Showcard Gothic", Font.PLAIN, 23));
         levelLabel.setForeground(Color.BLACK);
         levelLabel.setPreferredSize(new Dimension(120, 30));
@@ -46,6 +48,6 @@ public class LevelPanel extends JLabel {
     public void paintComponent(Graphics g){
         super.paintComponent(g);
         levelLabel.removeAll();
-        levelLabel.setText("   " + gameModel.getLevel());
+        levelLabel.setText("   " + gameModel.getLevel(this));
     }
 }

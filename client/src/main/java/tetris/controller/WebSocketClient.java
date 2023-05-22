@@ -1,13 +1,19 @@
 package tetris.controller;
 
+import tetris.model.GameLauncher;
+
 import javax.websocket.*;
 import java.io.IOException;
 import java.net.URI;
 
 @ClientEndpoint
 public class WebSocketClient implements MessageHandler.Whole<String>{
-
+    private GameLauncher gameLauncher;
     private Session session;
+
+    public WebSocketClient(GameLauncher gameLauncher) {
+        this.gameLauncher = gameLauncher;
+    }
 
     @OnOpen
     public void onOpen(Session session) {
@@ -35,7 +41,7 @@ public class WebSocketClient implements MessageHandler.Whole<String>{
         }
     }
 
-    public void send(String message) {
+    public void sendMessage(String message) {
         try {
             session.getBasicRemote().sendText(message);
         } catch (IOException e) {

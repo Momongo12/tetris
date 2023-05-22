@@ -1,21 +1,18 @@
 package tetris.model;
 
 import static tetris.util.TetrisConstants.*;
+
 import org.apache.logging.log4j.Logger;
-import tetris.controller.TetrominoController;
 import tetris.logger.MyLoggerFactory;
 import tetris.resource.ResourceManager;
-import tetris.view.GamePanel;
-import tetris.view.InfoPanel;
-import tetris.view.NextShapePanel;
-import tetris.view.Square;
+import tetris.view.*;
 
 import javax.sound.sampled.*;
 import java.awt.*;
 import java.util.ArrayList;
 
 
-public class GameModel {
+public class SoloGameModel implements GameModel {
     private final int stepIncremetialOfGameSpeed = 200;
     private final int initialGameSpeed = 1000;
     private int gameSpeed = 1000;
@@ -23,10 +20,9 @@ public class GameModel {
     private int score = 0;
     private int lines = 0;
 
-    private static final Logger LOGGER = MyLoggerFactory.getLogger(GameModel.class);
+    private static final Logger LOGGER = MyLoggerFactory.getLogger(SoloGameModel.class);
 
     private ArrayList<Square[]> board;
-    private TetrominoController tetrominoController;
     private TetrominoFactory tetrominoFactory;
 
     private Tetromino tetromino;
@@ -38,6 +34,9 @@ public class GameModel {
     private GamePanel gamePanel;
     private InfoPanel infoPanel;
     private NextShapePanel nextShapePanel;
+    private HoldPanel holdPanel;
+    private GameMatrix gameMatrix;
+    private LevelPanel levelPanel;
 
     private Color boardColor = new Color(20, 40, 60);
     private boolean gameOver;
@@ -45,7 +44,7 @@ public class GameModel {
 
     private Clip moveSound, rotateSound, dropSound;
 
-    public GameModel(GameLauncher gameLauncher) {
+    public SoloGameModel(GameLauncher gameLauncher) {
         this.gameLauncher = gameLauncher;
         gameIsActive = false;
         gameOver = false;
@@ -54,15 +53,34 @@ public class GameModel {
         tetrominoFactory = new TetrominoFactory();
         tetromino = tetrominoFactory.getNextTetromino();
         nextTetromino = tetrominoFactory.getNextTetromino();
-        tetrominoController = new TetrominoController(this);
     }
 
     public void setGamePanel(GamePanel gamePanel) {
         this.gamePanel = gamePanel;
     }
 
-    public void initSounds(){
-        try{
+    public void addInfoPanel(InfoPanel infoPanel) {
+        this.infoPanel = infoPanel;
+    }
+
+    public void addGameMatrix(GameMatrix gameMatrix) {
+        this.gameMatrix = gameMatrix;
+    }
+
+    public void addNextShapePanel(NextShapePanel nextShapePanel) {
+        this.nextShapePanel = nextShapePanel;
+    }
+
+    public void addHoldPanel(HoldPanel holdPanel) {
+        this.holdPanel = holdPanel;
+    }
+
+    public void addLevelPanel(LevelPanel levelPanel) {
+        this.levelPanel = levelPanel;
+    }
+
+    public void initSounds() {
+        try {
             moveSound = ResourceManager.getSound("moveSound.wav");
             rotateSound = ResourceManager.getSound("rotateSound.wav");
             dropSound = ResourceManager.getSound("dropSound.wav");
@@ -85,7 +103,7 @@ public class GameModel {
 
             LOGGER.debug("Game sounds loaded");
 
-        } catch (Exception ex){
+        } catch (Exception ex) {
             LOGGER.error("Game sound initialization error", ex);
         }
 
@@ -129,11 +147,11 @@ public class GameModel {
         }
     }
 
-    public void pauseGame(){
+    public void pauseGame() {
         gameIsActive = !gameIsActive;
     }
 
-    public void refreshGameData(){
+    public void refreshGameData() {
         gameIsActive = false;
         gameOver = false;
         level = 1;
@@ -199,30 +217,30 @@ public class GameModel {
         LOGGER.trace("Tetromino holded");
     }
 
-    private void removeFilledLines(){
+    private void removeFilledLines() {
         int countRemovedLines = 0;
-        for (int i = 0; i < ROWS; i++){
+        for (int i = 0; i < ROWS; i++) {
             int countFilledSquare = 0;
-            for (int j = 0; j < COLUMNS; j++){
+            for (int j = 0; j < COLUMNS; j++) {
                 if (board.get(i)[j].getColor() != boardColor) countFilledSquare++;
             }
-            if (countFilledSquare == COLUMNS){
+            if (countFilledSquare == COLUMNS) {
                 board.remove(i);
                 board.add(0, new Square[COLUMNS]);
-                for (int j = 0; j < COLUMNS; j++){
+                for (int j = 0; j < COLUMNS; j++) {
                     board.get(0)[j] = new Square(0, 0, i, j, boardColor);
                 }
                 countRemovedLines++;
                 lines++;
             }
         }
-        if (countRemovedLines == 1){
+        if (countRemovedLines == 1) {
             score += 100;
-        }else if (countRemovedLines == 2){
+        } else if (countRemovedLines == 2) {
             score += 300;
-        }else if (countRemovedLines == 3){
+        } else if (countRemovedLines == 3) {
             score += 700;
-        }else if (countRemovedLines == 4){
+        } else if (countRemovedLines == 4) {
             score += 1500;
         }
         LOGGER.trace("filed line removed");
@@ -266,52 +284,44 @@ public class GameModel {
         }
     }
 
-    public void setInfoPanel(InfoPanel infoPanel) {
-        this.infoPanel = infoPanel;
-    }
-
     public boolean getGameStatus() {
         return gameIsActive;
     }
 
-    public int getScore() {
+    public int getScore(InfoPanel infoPanel) {
         return score;
     }
 
-    public int getLines() {
+    public int getLines(InfoPanel infoPanel) {
         return lines;
     }
 
-    public int getLevel(){
+    public int getLevel(LevelPanel levelPanel) {
         return level;
     }
 
-    public Tetromino getNextTetromino() {
+    public Tetromino getNextTetromino(NextShapePanel nextShapePanel) {
         return nextTetromino;
     }
 
-    public Tetromino getHoldTetromino() {
+    public Tetromino getHoldTetromino(HoldPanel holdPanel) {
         return holdTetromino;
     }
 
-    public void setGameLevel(int level){
-         this.level = level;
-         updateGameSpeed(level);
+    public void setGameLevel(int level) {
+        this.level = level;
+        updateGameSpeed(level);
     }
 
-    private void updateGameSpeed(int level){
+    private void updateGameSpeed(int level) {
         this.gameSpeed = initialGameSpeed - (level - 1) * stepIncremetialOfGameSpeed;
     }
 
-    public ArrayList<Square[]> getBoard() {
+    public ArrayList<Square[]> getBoard(GameMatrix gameMatrix) {
         return board;
     }
 
-    public TetrominoController getTetrominoController() {
-        return tetrominoController;
-    }
-
-    public Tetromino getTetromino() {
+    public Tetromino getTetromino(GameMatrix gameMatrix) {
         return tetromino;
     }
 }

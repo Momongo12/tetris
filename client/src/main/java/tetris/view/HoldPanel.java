@@ -1,6 +1,7 @@
 package tetris.view;
 
 import tetris.model.GameModel;
+import tetris.model.SoloGameModel;
 import tetris.model.Tetromino;
 import static tetris.resource.ResourceManager.*;
 
@@ -16,25 +17,26 @@ public class HoldPanel extends JLabel {
     private final int offsetXForShape = 10;
     HoldPanel(GameModel gameModel){
         this.gameModel = gameModel;
+        gameModel.addHoldPanel(this);
         setPreferredSize(new Dimension(WIGHT, HEIGHT));
         setSize(getPreferredSize());
         setIcon(getImg("backgroundForHoldShapePanel.png", WIGHT, HEIGHT));
 
     }
-
     @Override
     public void paintComponent(Graphics g){
         super.paintComponent(g);
-        Tetromino tetromino = gameModel.getHoldTetromino();
-        boolean[][] tetrominoShape = new boolean[0][0];
-        if (tetromino != null) tetrominoShape = gameModel.getHoldTetromino().getShape();
-        for (int i = 0; i < tetrominoShape.length; i++){
-            for (int j = 0; j < tetrominoShape[i].length; j++){
-                if (tetrominoShape[i][j]){
-                    int x = j * BLOCK_SIZE + offsetXForShape;
-                    int y = i * BLOCK_SIZE + offsetYForShape;
-                    g.setColor(gameModel.getNextTetromino().getColor());
-                    g.fillRect(x, y, BLOCK_SIZE, BLOCK_SIZE);
+        Tetromino holdTetromino = gameModel.getHoldTetromino(this);
+        if (holdTetromino != null) {
+            boolean[][] holdTetrominoShape = holdTetromino.getShape();
+            for (int i = 0; i < holdTetrominoShape.length; i++) {
+                for (int j = 0; j < holdTetrominoShape[i].length; j++) {
+                    if (holdTetrominoShape[i][j]) {
+                        int x = j * BLOCK_SIZE + offsetXForShape;
+                        int y = i * BLOCK_SIZE + offsetYForShape;
+                        g.setColor(holdTetromino.getColor());
+                        g.fillRect(x, y, BLOCK_SIZE, BLOCK_SIZE);
+                    }
                 }
             }
         }

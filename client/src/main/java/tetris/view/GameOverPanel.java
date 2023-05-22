@@ -80,6 +80,6 @@ public class GameOverPanel extends JPanel implements ActionListener {
         if (e.getSource() == toHomeButton){
             gameLauncher.getLauncherView().displayLauncherHomepage();
         }
-        gameLauncher.getGameModel().refreshGameData();
+        gameLauncher.getSoloGameModel().refreshGameData();
     }
 }

@@ -1,12 +1,15 @@
 package tetris.model;
 
+import lombok.Data;
 import org.apache.logging.log4j.Logger;
 import tetris.controller.LauncherController;
+import tetris.controller.TetrominoController;
 import tetris.controller.WebSocketClient;
 import tetris.dataAccessLayer.HighScoreDataAccessObject;
 import tetris.dataAccessLayer.PlayerStatisticsTableDataAccessObject;
 import tetris.logger.MyLoggerFactory;
 import tetris.resource.ResourceManager;
+import tetris.view.GamePanel;
 import tetris.view.LauncherPreview;
 import tetris.view.LauncherView;
 import tetris.view.NavigationPanel;
@@ -14,13 +17,16 @@ import tetris.view.NavigationPanel;
 import javax.sound.sampled.*;
 import javax.swing.*;
 
+@Data
 public class GameLauncher {
     private NavigationPanel navigationPanel;
     private LauncherController launcherController;
     private LauncherView launcherView;
+    private TetrominoController tetrominoController;
     private GameModel gameModel;
     private WebSocketClient webSocketClient;
     private Player currentPlayer;
+    private GamePanel gamePanel;
 
     private SwingWorker<Void, Void> worker;
 
@@ -32,12 +38,13 @@ public class GameLauncher {
     private static final Logger LOGGER = MyLoggerFactory.getLogger(GameLauncher.class);
 
     public GameLauncher(){
-        gameModel = new GameModel(this);
+        gameModel = new SoloGameModel(this);
+        tetrominoController = new TetrominoController(gameModel);
 
         new LauncherPreview(this);
         launcherController = new LauncherController(this);
         launcherView = new LauncherView(this, launcherController);
-        launcherView.addKeyListener(gameModel.getTetrominoController());
+        launcherView.addKeyListener(tetrominoController);
 
         initBackgroundSounds();
         LOGGER.info("Launcher started");
@@ -66,6 +73,42 @@ public class GameLauncher {
     }
 
     public void startGame(){
+        if (webSocketClient != null) {
+            startPvpGame();
+        }else {
+            startSoloGame();
+        }
+    }
+
+    public void connectToServer() {
+        if (webSocketClient == null) {
+            System.out.println("попытка подключения к серверу");
+            webSocketClient = new WebSocketClient(this);
+            webSocketClient.connect("ws://localhost:8080/game");
+        }
+    }
+
+//    public void destroyWebSocketClient() {
+//        webSocketClient = null;
+//    }
+
+    public void displayPvPGameField() {
+        if (webSocketClient != null) {
+            launcherView.displayPvPGameMode();
+        }
+    }
+
+    public void startPvpGame() {
+        if (webSocketClient != null) {
+            gameModel = new PvPGameModel(this);
+            tetrominoController.setGameModel(gameModel);
+
+            //Отправляем запрос к серверу о старте игры
+        }
+
+    }
+
+    public void startSoloGame() {
         if (backgroundMusicIsDisable) {
             arrayOfSounds[soundIndex].start();
             backgroundMusicIsDisable = false;
@@ -79,14 +122,6 @@ public class GameLauncher {
         };
         worker.execute();
         LOGGER.info("Game started");
-    }
-
-    public void startPvpGame() {
-        if (webSocketClient == null) {
-            System.out.println("попытка подключения к серверу");
-            webSocketClient = new WebSocketClient();
-            webSocketClient.connect("ws://localhost:8080/game");
-        }
     }
 
     public void stopGame(){
@@ -162,8 +197,8 @@ public class GameLauncher {
 
     public NavigationPanel getNavigationPanel() { return navigationPanel; }
 
-    public GameModel getGameModel(){
-        return gameModel;
+    public SoloGameModel getSoloGameModel(){
+        return (SoloGameModel) gameModel;
     }
 
     public LauncherView getLauncherView(){

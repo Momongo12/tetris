@@ -1,4 +1,6 @@
-03:20:05 DEBUG t.m.GameModel [main] Game sounds loaded
-03:20:07 DEBUG t.m.GameLauncher [main] background sounds loaded
-03:20:07 INFO t.m.GameLauncher [main] Launcher started
-03:21:01 INFO t.m.GameLauncher [AWT-EventQueue-0] Player log in
+22:11:42 DEBUG t.m.SoloGameModel [main] Game sounds loaded
+22:11:44 DEBUG t.m.GameLauncher [main] background sounds loaded
+22:11:44 INFO t.m.GameLauncher [main] Launcher started
+22:11:51 INFO t.m.GameLauncher [AWT-EventQueue-0] Player log in
+22:12:35 DEBUG t.m.SoloGameModel [AWT-EventQueue-0] Game sounds loaded
+22:12:38 INFO t.m.GameLauncher [AWT-EventQueue-0] Game stopped
