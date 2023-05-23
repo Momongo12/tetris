@@ -8,7 +8,7 @@ import javax.swing.*;
 import java.awt.*;
 
 public class GamePanel extends JPanel {
-    private final GameModel gameModel;
+    private GameModel gameModel;
     private final GameLauncher gameLauncher;
 
     private JPanel gameField;
@@ -80,7 +80,14 @@ public class GamePanel extends JPanel {
         add(gameAndQueue);
     }
 
-    public void displayPvPGameMode() {
+    public void displayPvPGameMode(GameModel gameModel) {
+        infoPanel1 = new InfoPanel(gameModel);
+        gameMatrix1 = new GameMatrix(gameModel);
+        navigationPanel = new NavigationPanel(gameLauncher);
+        nextShapePanel1 = new NextShapePanel(gameModel);
+        holdPanel1 = new HoldPanel(gameModel);
+        levelPanel1 = new LevelPanel(gameModel);
+
         infoPanel2 = new InfoPanel(gameModel);
         gameMatrix2 = new GameMatrix(gameModel);
         nextShapePanel2 = new NextShapePanel(gameModel);
@@ -133,7 +140,7 @@ public class GamePanel extends JPanel {
         gameAndQueueBox.setOpaque(false);
         gameAndQueueBox.setBackground(null);
         gameAndQueueBox.setLayout(new BorderLayout());
-        gameAndQueueBox.setPreferredSize(new Dimension(800, 500));
+        gameAndQueueBox.setPreferredSize(new Dimension(800, 510));
 
         gameAndQueueBox.add(gameAndQueue1, BorderLayout.LINE_START);
         gameAndQueueBox.add(gameAndQueue2, BorderLayout.LINE_END);
@@ -204,6 +211,20 @@ public class GamePanel extends JPanel {
             infoPanel2.repaint();
             nextShapePanel2.repaint();
             holdPanel2.repaint();
+        }
+    }
+
+    public void setGameModel(GameModel gameModel) {
+        this.gameModel = gameModel;
+        gameMatrix1.setGameModel(gameModel);
+        infoPanel1.setGameModel(gameModel);
+        nextShapePanel1.setGameModel(gameModel);
+        holdPanel1.setGameModel(gameModel);
+        if (gameMatrix2 != null && infoPanel2 != null && nextShapePanel2 != null && holdPanel2 != null) {
+            gameMatrix2.setGameModel(gameModel);
+            infoPanel2.setGameModel(gameModel);
+            nextShapePanel2.setGameModel(gameModel);
+            holdPanel2.setGameModel(gameModel);
         }
     }
 }

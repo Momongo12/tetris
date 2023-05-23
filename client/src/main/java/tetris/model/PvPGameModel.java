@@ -1,5 +1,8 @@
 package tetris.model;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.apache.logging.log4j.Logger;
 import tetris.controller.WebSocketClient;
 import tetris.logger.MyLoggerFactory;
@@ -23,7 +26,7 @@ public class PvPGameModel implements GameModel {
     private final Color boardColor = new Color(20, 40, 60);
     private Clip moveSound, rotateSound, dropSound;
     private final GameLauncher gameLauncher;
-    private final PvPGameSession pvPGameSession;
+    private PvPGameSession pvPGameSession;
     private final WebSocketClient webSocketClient;
 
     private GamePanel gamePanel;
@@ -91,7 +94,14 @@ public class PvPGameModel implements GameModel {
 
 
     public void startGame() {
-
+        while (!pvPGameSession.isGameOver()) {
+            try {
+                Thread.sleep(pvPGameSession.getGameSpeed() / 2);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            gamePanel.repaint();
+        }
     }
 
     public void pauseGame() {
@@ -99,19 +109,53 @@ public class PvPGameModel implements GameModel {
     }
 
     public void moveTetromino(int direction) {
+        ObjectMapper objectMapper = new ObjectMapper();
+        try {
+            ObjectNode message = objectMapper.createObjectNode();
+            message.put("eventType", "moveTetromino");
+            message.put("direction", direction);
+            message.put("sessionId", pvPGameSession.getSessionId());
 
+            String jsonMessage = objectMapper.writeValueAsString(message);
+
+            webSocketClient.sendMessage(jsonMessage);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
     }
 
     public void rotateTetromino() {
+        ObjectMapper objectMapper = new ObjectMapper();
+        try {
+            ObjectNode message = objectMapper.createObjectNode();
+            message.put("eventType", "rotateTetromino");
+            message.put("sessionId", pvPGameSession.getSessionId());
 
+            String jsonMessage = objectMapper.writeValueAsString(message);
+
+            webSocketClient.sendMessage(jsonMessage);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
     }
 
     public void holdTetromino() {
+        ObjectMapper objectMapper = new ObjectMapper();
+        try {
+            ObjectNode message = objectMapper.createObjectNode();
+            message.put("eventType", "holdTetromino");
+            message.put("sessionId", pvPGameSession.getSessionId());
 
+            String jsonMessage = objectMapper.writeValueAsString(message);
+
+            webSocketClient.sendMessage(jsonMessage);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
     }
 
     public boolean getGameStatus() {
-        return false;
+        return true;
     }
 
     public void setGamePanel(GamePanel gamePanel) {
@@ -214,5 +258,9 @@ public class PvPGameModel implements GameModel {
         }else {
             return pvPGameSession.getHoldTetrominoPlayer2();
         }
+    }
+
+    public void setPvPGameSession(PvPGameSession pvPGameSession) {
+        this.pvPGameSession = pvPGameSession;
     }
 }

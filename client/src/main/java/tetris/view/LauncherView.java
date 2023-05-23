@@ -2,6 +2,8 @@ package tetris.view;
 
 import tetris.controller.LauncherController;
 import tetris.model.GameLauncher;
+import tetris.model.GameModel;
+
 import static tetris.resource.ResourceManager.*;
 
 import javax.swing.*;
@@ -199,8 +201,8 @@ public class LauncherView extends JFrame {
         revalidate();
     }
 
-    public void displayPvPGameMode() {
-        gamePanel.displayPvPGameMode();
+    public void displayPvPGameMode(GameModel gameModel) {
+        gamePanel.displayPvPGameMode(gameModel);
         displayGamePanel();
     }
 

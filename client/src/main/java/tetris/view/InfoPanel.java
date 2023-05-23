@@ -106,4 +106,7 @@ public class InfoPanel extends JPanel {
         super.paintComponent(g);
     }
 
+    public void setGameModel(GameModel gameModel) {
+        this.gameModel = gameModel;
+    }
 }

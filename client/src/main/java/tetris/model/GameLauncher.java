@@ -1,5 +1,8 @@
 package tetris.model;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import lombok.Data;
 import org.apache.logging.log4j.Logger;
 import tetris.controller.LauncherController;
@@ -94,18 +97,50 @@ public class GameLauncher {
 
     public void displayPvPGameField() {
         if (webSocketClient != null) {
-            launcherView.displayPvPGameMode();
+            gameModel = new PvPGameModel(this);
+            tetrominoController.setGameModel(gameModel);
+            launcherView.displayPvPGameMode(gameModel);
         }
     }
 
     public void startPvpGame() {
         if (webSocketClient != null) {
-            gameModel = new PvPGameModel(this);
-            tetrominoController.setGameModel(gameModel);
-
             //Отправляем запрос к серверу о старте игры
-        }
+            ObjectMapper objectMapper = new ObjectMapper();
+            try {
+                ObjectNode message = objectMapper.createObjectNode();
+                message.put("eventType", "createPvPGameSession");
 
+                String jsonMessage = objectMapper.writeValueAsString(message);
+
+                webSocketClient.sendMessage(jsonMessage);
+            } catch (JsonProcessingException e) {
+                e.printStackTrace();
+            }
+
+            if (backgroundMusicIsDisable) {
+                arrayOfSounds[soundIndex].start();
+                backgroundMusicIsDisable = false;
+            }
+            worker = new SwingWorker<>() {
+                @Override
+                protected Void doInBackground(){
+                    gameModel.startGame();
+                    return null;
+                }
+            };
+            worker.execute();
+            LOGGER.info("Pvp game started");
+        }
+    }
+
+    public void updatePvPGameSession(PvPGameSession gameSession) {
+        if (webSocketClient != null){
+            if (!navigationPanel.getPlayStatus()) {
+                navigationPanel.getPlayOrPauseButton().doClick();
+            }
+            ((  PvPGameModel) gameModel).setPvPGameSession(gameSession);
+        }
     }
 
     public void startSoloGame() {
@@ -121,7 +156,7 @@ public class GameLauncher {
             }
         };
         worker.execute();
-        LOGGER.info("Game started");
+        LOGGER.info("Solo game started");
     }
 
     public void stopGame(){

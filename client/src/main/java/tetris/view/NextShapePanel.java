@@ -45,4 +45,7 @@ public class NextShapePanel extends JLabel {
         }
     }
 
+    public void setGameModel(GameModel gameModel) {
+        this.gameModel = gameModel;
+    }
 }

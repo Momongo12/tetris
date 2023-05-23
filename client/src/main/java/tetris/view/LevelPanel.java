@@ -50,4 +50,8 @@ public class LevelPanel extends JLabel {
         levelLabel.removeAll();
         levelLabel.setText("   " + gameModel.getLevel(this));
     }
+
+    public void setGameModel(GameModel gameModel) {
+        this.gameModel = gameModel;
+    }
 }

@@ -1,6 +1,7 @@
 package tetris.controller;
 
 import tetris.model.GameLauncher;
+import tetris.model.PvPGameSession;
 
 import javax.websocket.*;
 import java.io.IOException;
@@ -23,8 +24,8 @@ public class WebSocketClient implements MessageHandler.Whole<String>{
 
     @OnMessage
     public void onMessage(String message) {
-        System.out.println("Received message: " + message);
-        // Обработка входящего сообщения
+        PvPGameSession pvPGameSession = PvPGameSession.deserialize(message);
+        gameLauncher.updatePvPGameSession(pvPGameSession);
     }
 
     @OnClose

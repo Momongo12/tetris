@@ -95,6 +95,8 @@ public class NavigationPanel extends JPanel implements ActionListener {
         }
     }
 
+    public boolean getPlayStatus() { return playEnabled; }
+
     public JButton getPlayOrPauseButton() {
         return playOrPauseButton;
     }

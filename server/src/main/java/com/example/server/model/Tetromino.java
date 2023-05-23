@@ -1,4 +1,4 @@
-package tetris.model;
+package com.example.server.model;
 
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.JsonParser;
@@ -10,20 +10,20 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
 import com.fasterxml.jackson.databind.node.TextNode;
-import tetris.view.Square;
 
-import static tetris.util.TetrisConstants.*;
 import java.awt.*;
 import java.io.IOException;
 import java.util.ArrayList;
+
+import static com.example.server.util.TetrisConstants.*;
 
 public class Tetromino {
     private TetrominoType type;
     private boolean[][] shape;
     ArrayList<Square> blocks;
 
-    @JsonSerialize(using = Square.ColorSerializer.class)
-    @JsonDeserialize(using = Square.ColorDeserializer.class)
+    @JsonSerialize(using = ColorSerializer.class)
+    @JsonDeserialize(using = ColorDeserializer.class)
     private Color color;
     private int row;
     private int col;
