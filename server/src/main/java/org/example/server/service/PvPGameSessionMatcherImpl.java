@@ -1,7 +1,5 @@
-package com.example.server.service;
+package org.example.server.service;
 
-import com.example.server.model.PvPGameModel;
-import com.example.server.model.PvPGameSession;
 import org.springframework.stereotype.Service;
 import org.springframework.web.socket.WebSocketSession;
 
@@ -13,17 +11,17 @@ import java.util.concurrent.Executors;
 @Service
 public class PvPGameSessionMatcherImpl implements PvPGameSessionMatcher{
     private List<WebSocketSession> waitingPlayers = new ArrayList<>();
-    private Map<String, PvPGameModel> pvPGameModels = new ConcurrentHashMap<>();
+    private Map<String, PvPGameSession> pvPGameSessions = new ConcurrentHashMap<>();
 
     public void createPvPGameSession(WebSocketSession playerSession) {
         if (waitingPlayers.contains(playerSession)) {
             waitingPlayers.remove(playerSession);
             WebSocketSession player2Session = waitingPlayers.remove(0);
-            PvPGameModel pvPGameModel = new PvPGameModel(playerSession, player2Session);
-            pvPGameModels.put(pvPGameModel.getPvPGameSession().getSessionId(), pvPGameModel);
+            PvPGameSession pvPGameSession = new PvPGameSession(playerSession, player2Session);
+            pvPGameSessions.put(pvPGameSession.getPvPGameModel().getSessionId(), pvPGameSession);
 
             ExecutorService executorService = Executors.newSingleThreadExecutor();
-            executorService.execute(pvPGameModel::startGame);
+            executorService.execute(pvPGameSession::startGame);
         }
     }
 
@@ -35,7 +33,7 @@ public class PvPGameSessionMatcherImpl implements PvPGameSessionMatcher{
         waitingPlayers.remove(session);
     }
 
-    public PvPGameModel getPvPGameModel(String sessionId) {
-        return pvPGameModels.get(sessionId);
+    public PvPGameSession getPvPGameSession(String sessionId) {
+        return pvPGameSessions.get(sessionId);
     }
 }

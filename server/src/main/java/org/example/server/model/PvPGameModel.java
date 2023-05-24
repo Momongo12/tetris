@@ -1,4 +1,4 @@
-package com.example.server.model;
+package org.example.server.model;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.UUID;
 
 @Data
-public class PvPGameSession {
+public class PvPGameModel {
     private String sessionId;
     private int scorePlayer1;
     private int scorePlayer2;
@@ -27,7 +27,7 @@ public class PvPGameSession {
     private Tetromino holdTetrominoPlayer1;
     private Tetromino holdTetrominoPlayer2;
 
-    public PvPGameSession() {
+    public PvPGameModel() {
         this.sessionId = UUID.randomUUID().toString();
         this.scorePlayer1 = 0;
         this.scorePlayer2 = 0;
@@ -37,25 +37,6 @@ public class PvPGameSession {
         this.linesClearedPlayer2 = 0;
         this.gameSpeed = 1000;
         this.isGameOver = false;
-    }
-
-    public void increaseScorePlayer1(int value){
-        scorePlayer1 += value;
-    }
-    public void increaseScorePlayer2(int value){
-        scorePlayer2 += value;
-    }
-    public void increaseLevelPlayer1(int value){
-        levelPlayer1 += value;
-    }
-    public void increaseLevelPlayer2(int value) {
-        levelPlayer2 += value;
-    }
-    public void increaseLinesClearedPlayer1(int value) {
-        linesClearedPlayer1 += value;
-    }
-    public void increaseLinesClearedPlayer2(int value) {
-        linesClearedPlayer2 += value;
     }
 
     public String serialize() {
@@ -68,10 +49,10 @@ public class PvPGameSession {
         return null;
     }
 
-    public static PvPGameSession deserialize(String json) {
+    public static PvPGameModel deserialize(String json) {
         ObjectMapper objectMapper = new ObjectMapper();
         try {
-            return objectMapper.readValue(json, PvPGameSession.class);
+            return objectMapper.readValue(json, PvPGameModel.class);
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         }

@@ -1,6 +1,5 @@
-package com.example.server.service;
+package org.example.server.service;
 
-import com.example.server.model.PvPGameModel;
 import org.springframework.web.socket.WebSocketSession;
 
 public interface PvPGameSessionMatcher {
@@ -8,5 +7,5 @@ public interface PvPGameSessionMatcher {
     void addWaitingPlayerSession(WebSocketSession session);
     void removeWaitingPlayerSession(WebSocketSession session);
 
-    PvPGameModel getPvPGameModel(String sessionId);
+    PvPGameSession getPvPGameSession(String sessionId);
 }

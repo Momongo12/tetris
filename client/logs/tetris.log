@@ -1,6 +1,6 @@
-21:54:18 DEBUG t.m.SoloGameModel [main] Game sounds loaded
-21:54:20 DEBUG t.m.GameLauncher [main] background sounds loaded
-21:54:20 INFO t.m.GameLauncher [main] Launcher started
-21:56:11 INFO t.m.GameLauncher [AWT-EventQueue-0] Player log in
-21:56:15 DEBUG t.m.SoloGameModel [AWT-EventQueue-0] Game sounds loaded
-21:57:06 INFO t.m.GameLauncher [AWT-EventQueue-0] Pvp game started
+23:21:16 DEBUG t.m.SoloGameModel [main] Game sounds loaded
+23:21:18 DEBUG t.m.GameLauncher [main] background sounds loaded
+23:21:18 INFO t.m.GameLauncher [main] Launcher started
+23:21:23 INFO t.m.GameLauncher [AWT-EventQueue-0] Player log in
+23:21:28 DEBUG t.m.SoloGameModel [AWT-EventQueue-0] Game sounds loaded
+23:22:01 INFO t.m.GameLauncher [AWT-EventQueue-0] Pvp game started

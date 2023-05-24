@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration>
+    <Appenders>
+        <Console name="Console" target="SYSTEM_OUT">
+            <PatternLayout pattern="%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n" />
+        </Console>
+
+        <File name="FileAppender" fileName="logs/tetris.log" append="false">
+            <PatternLayout pattern="%d{HH:mm:ss} %p %c{1.} [%thread] %msg%n" />
+        </File>
+    </Appenders>
+
+    <Loggers>
+        <Logger name="tetris.view.*" level="debug" additivity="false">
+            <AppenderRef ref="FileAppender" />
+        </Logger>
+
+        <Root level="debug">
+            <AppenderRef ref="FileAppender" />
+        </Root>
+    </Loggers>
+</Configuration>

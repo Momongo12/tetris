@@ -1,4 +1,4 @@
-package com.example.server.model;
+package org.example.server.model;
 
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.JsonParser;
@@ -15,7 +15,7 @@ import java.awt.*;
 import java.io.IOException;
 import java.util.ArrayList;
 
-import static com.example.server.util.TetrisConstants.*;
+import static org.example.server.util.TetrisConstants.*;
 
 public class Tetromino {
     private TetrominoType type;

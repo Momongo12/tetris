@@ -1,4 +1,4 @@
-package com.example.server.model;
+package org.example.server.model;
 
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.JsonParser;

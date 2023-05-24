@@ -28,7 +28,6 @@ public class PvPGameSession {
     private Tetromino nextTetrominoPlayer2;
     private Tetromino holdTetrominoPlayer1;
     private Tetromino holdTetrominoPlayer2;
-
     public PvPGameSession() {
         this.sessionId = UUID.randomUUID().toString();
         this.scorePlayer1 = 0;

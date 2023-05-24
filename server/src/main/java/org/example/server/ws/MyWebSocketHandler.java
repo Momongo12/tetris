@@ -1,8 +1,8 @@
-package com.example.server.ws;
+package org.example.server.ws;
 
-import com.example.server.model.PvPGameModel;
-import com.example.server.model.PvPGameSession;
-import com.example.server.service.PvPGameSessionMatcher;
+import org.example.server.model.PvPGameModel;
+import org.example.server.service.PvPGameSession;
+import org.example.server.service.PvPGameSessionMatcher;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.web.socket.*;
@@ -41,29 +41,29 @@ public class MyWebSocketHandler extends TextWebSocketHandler {
         } else if (eventType.equals("moveTetromino")){
             String sessionId = jsonNode.get("sessionId").asText();
             String direction = jsonNode.get("direction").asText();
-            PvPGameModel pvPGameModel = pvPGameSessionMatcher.getPvPGameModel(sessionId);
+            PvPGameSession pvPGameSession = pvPGameSessionMatcher.getPvPGameSession(sessionId);
 
-            PvPGameSession pvPGameSession = pvPGameModel.getPvPGameSession();
-            if (playerSession == pvPGameModel.getSessionPlayer1()) {
-                pvPGameModel.moveTetromino(pvPGameSession.getTetrominoPlayer1(), pvPGameSession.getGameMatrixPlayer1(), Integer.parseInt(direction), playerSession);
+            PvPGameModel pvPGameModel = pvPGameSession.getPvPGameModel();
+            if (playerSession == pvPGameSession.getPlayer1Session()) {
+                pvPGameSession.moveTetromino(pvPGameModel.getTetrominoPlayer1(), pvPGameModel.getGameMatrixPlayer1(), Integer.parseInt(direction), playerSession);
             }else {
-                pvPGameModel.moveTetromino(pvPGameSession.getTetrominoPlayer2(), pvPGameSession.getGameMatrixPlayer2(), Integer.parseInt(direction), playerSession);
+                pvPGameSession.moveTetromino(pvPGameModel.getTetrominoPlayer2(), pvPGameModel.getGameMatrixPlayer2(), Integer.parseInt(direction), playerSession);
             }
         }else if (eventType.equals("rotateTetromino")) {
             String sessionId = jsonNode.get("sessionId").asText();
-            PvPGameModel pvPGameModel = pvPGameSessionMatcher.getPvPGameModel(sessionId);
+            PvPGameSession pvPGameSession = pvPGameSessionMatcher.getPvPGameSession(sessionId);
 
-            PvPGameSession pvPGameSession = pvPGameModel.getPvPGameSession();
-            if (playerSession == pvPGameModel.getSessionPlayer1()) {
-                pvPGameModel.rotateTetromino(pvPGameSession.getTetrominoPlayer1(), pvPGameSession.getGameMatrixPlayer1());
+            PvPGameModel pvPGameModel = pvPGameSession.getPvPGameModel();
+            if (playerSession == pvPGameSession.getPlayer1Session()) {
+                pvPGameSession.rotateTetromino(pvPGameModel.getTetrominoPlayer1(), pvPGameModel.getGameMatrixPlayer1());
             }else {
-                pvPGameModel.rotateTetromino(pvPGameSession.getTetrominoPlayer2(), pvPGameSession.getGameMatrixPlayer2());
+                pvPGameSession.rotateTetromino(pvPGameModel.getTetrominoPlayer2(), pvPGameModel.getGameMatrixPlayer2());
             }
         }else if (eventType.equals("holdTetromino")) {
             String sessionId = jsonNode.get("sessionId").asText();
-            PvPGameModel pvPGameModel = pvPGameSessionMatcher.getPvPGameModel(sessionId);
+            PvPGameSession pvPGameSession = pvPGameSessionMatcher.getPvPGameSession(sessionId);
 
-            pvPGameModel.holdTetromino(playerSession);
+            pvPGameSession.holdTetromino(playerSession);
         }
     }
 

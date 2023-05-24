@@ -1,4 +1,4 @@
-package com.example.server.model;
+package org.example.server.model;
 
 public enum TetrominoType {
     I(new boolean[][]{

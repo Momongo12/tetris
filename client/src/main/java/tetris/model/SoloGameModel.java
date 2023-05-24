@@ -234,14 +234,11 @@ public class SoloGameModel implements GameModel {
                 lines++;
             }
         }
-        if (countRemovedLines == 1) {
-            score += 100;
-        } else if (countRemovedLines == 2) {
-            score += 300;
-        } else if (countRemovedLines == 3) {
-            score += 700;
-        } else if (countRemovedLines == 4) {
-            score += 1500;
+        switch (countRemovedLines) {
+            case (1) -> score += 100;
+            case (2) -> score += 300;
+            case (3) -> score += 700;
+            case (4) -> score += 1500;
         }
         LOGGER.trace("filed line removed");
     }
