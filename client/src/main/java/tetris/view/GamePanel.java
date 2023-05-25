@@ -2,7 +2,6 @@ package tetris.view;
 
 import tetris.model.GameLauncher;
 import tetris.model.GameModel;
-import static tetris.util.ViewUtil.*;
 
 import javax.swing.*;
 import java.awt.*;
@@ -11,7 +10,7 @@ public class GamePanel extends JPanel {
     private GameModel gameModel;
     private final GameLauncher gameLauncher;
 
-    private JPanel gameField;
+    private JPanel gameField1, gameField2;
 
     private GameMatrix gameMatrix1, gameMatrix2;
     private InfoPanel infoPanel1, infoPanel2;
@@ -53,7 +52,7 @@ public class GamePanel extends JPanel {
         gameAndQueue.setLayout(new BorderLayout());
         gameAndQueue.setOpaque(false);
 
-        gameField = createGameField(gameMatrix1);
+        gameField1 = createGameField(gameMatrix1);
 
         JPanel nextPanel = new JPanel();
         nextPanel.setLayout(new BorderLayout(4, 4));
@@ -71,7 +70,7 @@ public class GamePanel extends JPanel {
         holdAndLevelPanel.add(levelPanel1, BorderLayout.PAGE_END);
         holdAndLevelPanel.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 5));
 
-        gameAndQueue.add(gameField, BorderLayout.CENTER);
+        gameAndQueue.add(gameField1, BorderLayout.CENTER);
         gameAndQueue.add(nextPanel, BorderLayout.LINE_END);
         gameAndQueue.add(holdAndLevelPanel, BorderLayout.LINE_START);
 
@@ -81,6 +80,8 @@ public class GamePanel extends JPanel {
     }
 
     public void displayPvPGameMode(GameModel gameModel) {
+        this.gameModel = gameModel;
+        gameModel.setGamePanel(this);
         infoPanel1 = new InfoPanel(gameModel);
         gameMatrix1 = new GameMatrix(gameModel);
         navigationPanel = new NavigationPanel(gameLauncher);
@@ -102,8 +103,8 @@ public class GamePanel extends JPanel {
         gameAndQueue2.setLayout(new BorderLayout());
         gameAndQueue2.setOpaque(false);
 
-        JPanel gameField1 = createGameField(gameMatrix1);
-        JPanel gameField2 = createGameField(gameMatrix2);
+        gameField1 = createGameField(gameMatrix1);
+        gameField2 = createGameField(gameMatrix2);
 
         JPanel gameDetails1 = new JPanel();
         gameDetails1.setLayout(new BorderLayout(4, 4));
@@ -174,7 +175,7 @@ public class GamePanel extends JPanel {
     }
 
     private JPanel createGameField(GameMatrix gameMatrix) {
-        gameField = new JPanel();
+        JPanel gameField = new JPanel();
         gameField.setLayout(new BorderLayout(4, 4));
         gameField.setBackground(null);
         gameField.setOpaque(false);
@@ -184,18 +185,34 @@ public class GamePanel extends JPanel {
         return gameField;
     }
 
-    public void displayGameOverPanel(){
-        gameField.removeAll();
-        gameField.add(new GameOverPanel(gameLauncher));
-        repaint();
-        revalidate();
+    public void displayGameOverPanel(GameMatrix gameMatrix){
+        if (gameMatrix != gameMatrix1) {
+            gameField1.removeAll();
+            gameField1.add(new GameOverPanel(gameLauncher));
+            gameMatrix1 = null;
+            repaint();
+            revalidate();
+        }else {
+            gameField2.removeAll();
+            gameField2.add(new GameOverPanel(gameLauncher));
+            gameMatrix2 = null;
+            repaint();
+            revalidate();
+        }
     }
 
-    public void deleteGameOverPanelAndAddGameMatrix(){
-        gameField.removeAll();
-        gameField.add(gameMatrix1);
-        repaint();
-        revalidate();
+    public void deleteGameOverPanelAndAddGameMatrix(GameMatrix gameMatrix){
+        if (gameMatrix != gameMatrix1) {
+            gameField1.removeAll();
+            gameField1.add(gameMatrix1);
+            repaint();
+            revalidate();
+        }else {
+            gameField2.removeAll();
+            gameField2.add(gameMatrix2);
+            repaint();
+            revalidate();
+        }
     }
 
     @Override
@@ -214,17 +231,17 @@ public class GamePanel extends JPanel {
         }
     }
 
-    public void setGameModel(GameModel gameModel) {
-        this.gameModel = gameModel;
-        gameMatrix1.setGameModel(gameModel);
-        infoPanel1.setGameModel(gameModel);
-        nextShapePanel1.setGameModel(gameModel);
-        holdPanel1.setGameModel(gameModel);
-        if (gameMatrix2 != null && infoPanel2 != null && nextShapePanel2 != null && holdPanel2 != null) {
-            gameMatrix2.setGameModel(gameModel);
-            infoPanel2.setGameModel(gameModel);
-            nextShapePanel2.setGameModel(gameModel);
-            holdPanel2.setGameModel(gameModel);
-        }
-    }
+//    public void setGameModel(GameModel gameModel) {
+//        this.gameModel = gameModel;
+//        gameMatrix1.setGameModel(gameModel);
+//        infoPanel1.setGameModel(gameModel);
+//        nextShapePanel1.setGameModel(gameModel);
+//        holdPanel1.setGameModel(gameModel);
+//        if (gameMatrix2 != null && infoPanel2 != null && nextShapePanel2 != null && holdPanel2 != null) {
+//            gameMatrix2.setGameModel(gameModel);
+//            infoPanel2.setGameModel(gameModel);
+//            nextShapePanel2.setGameModel(gameModel);
+//            holdPanel2.setGameModel(gameModel);
+//        }
+//    }
 }

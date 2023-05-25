@@ -94,7 +94,7 @@ public class PvPGameModel implements GameModel {
 
 
     public void startGame() {
-        while (!pvPGameSession.isGameOver()) {
+        while (!pvPGameSession.isGameOverPlayer1() || !pvPGameSession.isGameOverPlayer2()) {
             try {
                 Thread.sleep(pvPGameSession.getGameSpeed() / 2);
             } catch (Exception e) {

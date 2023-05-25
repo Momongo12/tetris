@@ -2,6 +2,8 @@ package org.example.server.service;
 
 
 import lombok.Data;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.example.server.util.TetrisConstants;
 import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
@@ -13,7 +15,7 @@ import java.util.ArrayList;
 
 @Data
 public class PvPGameSession {
-//    private static final Logger log = LogManager.getLogger(PvPGameSession.class);
+    private static final Logger log = LogManager.getLogger(PvPGameSession.class);
     private final PvPGameModel pvPGameModel;
     private final WebSocketSession player1Session;
     private final WebSocketSession player2Session;
@@ -52,7 +54,8 @@ public class PvPGameSession {
     }
 
     public void startGame() {
-        while (!pvPGameModel.isGameOver()) {
+        log.info("game started");
+        while (!pvPGameModel.isGameOverPlayer1() || !pvPGameModel.isGameOverPlayer2()) {
             try {
                 Thread.sleep(pvPGameModel.getGameSpeed());
             } catch (Exception e) {
@@ -61,7 +64,7 @@ public class PvPGameSession {
             if (tetrominoIsTouchedGround(pvPGameModel.getTetrominoPlayer1(), pvPGameModel.getGameMatrixPlayer1())) {
                 putTetrominoOnGround(pvPGameModel.getTetrominoPlayer1(), pvPGameModel.getGameMatrixPlayer1());
                 updateTetrominoByPlayerSession(player1Session);
-                pvPGameModel.setGameOver(isGameOver(pvPGameModel.getTetrominoPlayer1()));
+                updateGameOverStateByPlayerSession(player1Session);
             } else {
                 moveTetromino(pvPGameModel.getTetrominoPlayer1(), pvPGameModel.getGameMatrixPlayer1(), 2, player1Session);
             }
@@ -69,7 +72,7 @@ public class PvPGameSession {
             if (tetrominoIsTouchedGround(pvPGameModel.getTetrominoPlayer2(), pvPGameModel.getGameMatrixPlayer2())) {
                 putTetrominoOnGround(pvPGameModel.getTetrominoPlayer2(), pvPGameModel.getGameMatrixPlayer2());
                 updateTetrominoByPlayerSession(player2Session);
-                pvPGameModel.setGameOver(isGameOver(pvPGameModel.getTetrominoPlayer2()));
+                updateGameOverStateByPlayerSession(player2Session);
             } else {
                 moveTetromino(pvPGameModel.getTetrominoPlayer2(), pvPGameModel.getGameMatrixPlayer2(), 2, player2Session);
             }
@@ -92,19 +95,19 @@ public class PvPGameSession {
             case (3) -> tetromino.moveLeft();
         }
         if (tetrominoIsTouchedGround(tetromino, board)) {
-            pvPGameModel.setGameOver(isGameOver(tetromino));
+            updateGameOverStateByPlayerSession(playerSession);
             putTetrominoOnGround(tetromino, board);
             updateTetrominoByPlayerSession(playerSession);
         }
         removeFilledLines(board, playerSession);
         sendPlayersGameSessionState();
-//        log.debug("Tetromino moved");
+        log.debug("Tetromino moved");
     }
 
     public void rotateTetromino(Tetromino tetromino, ArrayList<Square[]> board) {
         tetromino.rotate(board, BOARD_COLOR);
         sendPlayersGameSessionState();
-//        log.debug("Tetromino rotated");
+        log.debug("Tetromino rotated");
     }
 
     public void holdTetromino(WebSocketSession sessionPlayer) {
@@ -132,7 +135,7 @@ public class PvPGameSession {
             }
         }
         sendPlayersGameSessionState();
-//        log.debug("Tetromino holded");
+        log.debug("Tetromino holded");
     }
 
     private void removeFilledLines(ArrayList<Square[]> board, WebSocketSession playerSession) {
@@ -158,7 +161,7 @@ public class PvPGameSession {
             case (3) -> increaseScoreByPlayerSession(playerSession, 700);
             case (4) -> increaseScoreByPlayerSession(playerSession, 1500);
         }
-//        log.debug("filed line removed");
+        log.debug("filed line removed");
     }
 
     private boolean tetrominoIsTouchWall(Tetromino tetromino, ArrayList<Square[]> board,int direction) {
@@ -171,7 +174,7 @@ public class PvPGameSession {
                 return true;
             }
         }
-//        log.debug("Tetromino touched wall");
+        log.debug("Tetromino touched wall");
         return false;
     }
 
@@ -183,7 +186,7 @@ public class PvPGameSession {
                 return true;
             }
         }
-//        log.debug("Tetromino touched ground");
+        log.debug("Tetromino touched ground");
         return false;
     }
 
@@ -236,6 +239,14 @@ public class PvPGameSession {
         }else {
             pvPGameModel.setTetrominoPlayer2(pvPGameModel.getNextTetrominoPlayer2());
             pvPGameModel.setNextTetrominoPlayer2(tetrominoFactory.getNextTetromino(player2Session));
+        }
+    }
+
+    private void updateGameOverStateByPlayerSession(WebSocketSession playerSession) {
+        if (playerSession == player1Session) {
+            pvPGameModel.setGameOverPlayer1(isGameOver(pvPGameModel.getTetrominoPlayer1()));
+        }else {
+            pvPGameModel.setGameOverPlayer2(isGameOver(pvPGameModel.getTetrominoPlayer2()));
         }
     }
 }

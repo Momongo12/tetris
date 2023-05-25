@@ -11,12 +11,12 @@
     </Appenders>
 
     <Loggers>
-        <Logger name="tetris.view.*" level="debug" additivity="false">
+        <Logger name="org.example.server.service.PvPGameSession" level="debug" additivity="false">
             <AppenderRef ref="FileAppender" />
         </Logger>
 
-        <Root level="debug">
-            <AppenderRef ref="FileAppender" />
+        <Root level="info">
+            <AppenderRef ref="Console" />
         </Root>
     </Loggers>
 </Configuration>

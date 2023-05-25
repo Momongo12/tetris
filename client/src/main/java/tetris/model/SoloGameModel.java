@@ -161,13 +161,13 @@ public class SoloGameModel implements GameModel {
         tetrominoFactory.refill();
         tetromino = tetrominoFactory.getNextTetromino();
         nextTetromino = tetrominoFactory.getNextTetromino();
-        gamePanel.deleteGameOverPanelAndAddGameMatrix();
+        gamePanel.deleteGameOverPanelAndAddGameMatrix(gameMatrix);
 
         LOGGER.debug("game data refreshed");
     }
 
     private void endGame() {
-        gamePanel.displayGameOverPanel();
+        gamePanel.displayGameOverPanel(gameMatrix);
         gameLauncher.getNavigationPanel().getPlayOrPauseButton().doClick();
         gameLauncher.updateStatisticPlayer(score, lines, level);
     }

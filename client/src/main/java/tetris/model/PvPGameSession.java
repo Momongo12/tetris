@@ -19,7 +19,8 @@ public class PvPGameSession {
     private int linesClearedPlayer1;
     private int linesClearedPlayer2;
     private int gameSpeed;
-    private boolean isGameOver;
+    private boolean isGameOverPlayer1;
+    private boolean isGameOverPlayer2;
     private ArrayList<Square[]> gameMatrixPlayer1;
     private ArrayList<Square[]> gameMatrixPlayer2;
     private Tetromino tetrominoPlayer1;
@@ -37,7 +38,8 @@ public class PvPGameSession {
         this.linesClearedPlayer1 = 0;
         this.linesClearedPlayer2 = 0;
         this.gameSpeed = 1000;
-        this.isGameOver = false;
+        this.isGameOverPlayer1 = false;
+        this.isGameOverPlayer2 = false;
     }
 
     public String serialize() {
