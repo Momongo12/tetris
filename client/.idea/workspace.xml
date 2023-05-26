@@ -5,25 +5,27 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="94c43816-397c-4c7b-a066-0c4474de69d0" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/../server/src/main/java/org/example/server/service/PvPGameSession.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../server/src/main/resources/log4j2.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/logs/tetris.log" beforeDir="false" afterPath="$PROJECT_DIR$/logs/tetris.log" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/tetris/controller/LauncherController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/tetris/controller/LauncherController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/tetris/controller/WebSocketClient.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/tetris/controller/WebSocketClient.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/tetris/model/GameLauncher.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/tetris/model/GameLauncher.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/tetris/model/GameModel.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/tetris/model/GameModel.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/tetris/model/PvPGameModel.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/tetris/model/PvPGameModel.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/tetris/model/PvPGameSession.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/tetris/model/PvPGameSession.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../server/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../server/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../server/src/main/java/com/example/server/ServerApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/../server/src/main/java/org/example/server/ServerApplication.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../server/src/main/java/com/example/server/config/WebSocketServer.java" beforeDir="false" afterPath="$PROJECT_DIR$/../server/src/main/java/org/example/server/config/WebSocketServer.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../server/src/main/java/com/example/server/model/PvPGameModel.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../server/src/main/java/com/example/server/model/PvPGameSession.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../server/src/main/java/com/example/server/model/Square.java" beforeDir="false" afterPath="$PROJECT_DIR$/../server/src/main/java/org/example/server/model/Square.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../server/src/main/java/com/example/server/model/Tetromino.java" beforeDir="false" afterPath="$PROJECT_DIR$/../server/src/main/java/org/example/server/model/Tetromino.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../server/src/main/java/com/example/server/model/TetrominoFactory.java" beforeDir="false" afterPath="$PROJECT_DIR$/../server/src/main/java/org/example/server/model/TetrominoFactory.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../server/src/main/java/com/example/server/model/TetrominoType.java" beforeDir="false" afterPath="$PROJECT_DIR$/../server/src/main/java/org/example/server/model/TetrominoType.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../server/src/main/java/com/example/server/service/PvPGameSessionMatcher.java" beforeDir="false" afterPath="$PROJECT_DIR$/../server/src/main/java/org/example/server/service/PvPGameSessionMatcher.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../server/src/main/java/com/example/server/service/PvPGameSessionMatcherImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/../server/src/main/java/org/example/server/service/PvPGameSessionMatcherImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../server/src/main/java/com/example/server/util/TetrisConstants.java" beforeDir="false" afterPath="$PROJECT_DIR$/../server/src/main/java/org/example/server/util/TetrisConstants.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../server/src/main/java/com/example/server/ws/MyWebSocketHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/../server/src/main/java/org/example/server/ws/MyWebSocketHandler.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../server/src/test/java/com/example/server/ServerApplicationTests.java" beforeDir="false" afterPath="$PROJECT_DIR$/../server/src/test/java/org/example/server/ServerApplicationTests.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/tetris/model/SoloGameModel.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/tetris/model/SoloGameModel.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/tetris/view/GameMatrix.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/tetris/view/GameMatrix.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/tetris/view/GameOverPanel.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/tetris/view/GameOverPanel.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/tetris/view/GamePanel.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/tetris/view/GamePanel.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/tetris/view/HoldPanel.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/tetris/view/HoldPanel.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/tetris/view/InfoPanel.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/tetris/view/InfoPanel.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/tetris/view/LevelPanel.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/tetris/view/LevelPanel.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/tetris/view/NextShapePanel.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/tetris/view/NextShapePanel.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../server/src/main/java/org/example/server/model/PvPGameModel.java" beforeDir="false" afterPath="$PROJECT_DIR$/../server/src/main/java/org/example/server/model/PvPGameModel.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../server/src/main/java/org/example/server/service/PvPGameSession.java" beforeDir="false" afterPath="$PROJECT_DIR$/../server/src/main/java/org/example/server/service/PvPGameSession.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../server/src/main/java/org/example/server/service/PvPGameSessionMatcher.java" beforeDir="false" afterPath="$PROJECT_DIR$/../server/src/main/java/org/example/server/service/PvPGameSessionMatcher.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../server/src/main/java/org/example/server/service/PvPGameSessionMatcherImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/../server/src/main/java/org/example/server/service/PvPGameSessionMatcherImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../server/src/main/java/org/example/server/ws/MyWebSocketHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/../server/src/main/java/org/example/server/ws/MyWebSocketHandler.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -84,11 +86,22 @@
       <workItem from="1684579062226" duration="715000" />
       <workItem from="1684614114940" duration="148000" />
       <workItem from="1684786343666" duration="6641000" />
-      <workItem from="1684828000762" duration="16565000" />
+      <workItem from="1684828000762" duration="32059000" />
     </task>
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
   </component>
 </project>

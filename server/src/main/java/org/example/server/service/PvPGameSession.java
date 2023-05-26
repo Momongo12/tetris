@@ -1,6 +1,9 @@
 package org.example.server.service;
 
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import lombok.Data;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -26,7 +29,7 @@ public class PvPGameSession {
     public PvPGameSession(WebSocketSession player1Session, WebSocketSession player2Session) {
         this.player1Session = player1Session;
         this.player2Session = player2Session;
-        this.pvPGameModel = new PvPGameModel();
+        this.pvPGameModel = new PvPGameModel(player1Session.getId(), player2Session.getId());
 
         pvPGameModel.setGameMatrixPlayer1(initBoard());
         pvPGameModel.setGameMatrixPlayer2(initBoard());
@@ -111,6 +114,7 @@ public class PvPGameSession {
     }
 
     public void holdTetromino(WebSocketSession sessionPlayer) {
+        System.out.println(sessionPlayer.getId());
         if (sessionPlayer.getId().equals(player1Session.getId())){
             if (isHoldTetrominoPlayer1) {
                 Tetromino tmpTetromino = pvPGameModel.getHoldTetrominoPlayer1();
@@ -204,14 +208,28 @@ public class PvPGameSession {
     }
 
     private void sendPlayersGameSessionState() {
-        synchronized (player1Session) {
-            synchronized (player2Session) {
-                try {
-                    player1Session.sendMessage(new TextMessage(pvPGameModel.serialize()));
-                    player2Session.sendMessage(new TextMessage(pvPGameModel.serialize()));
-                } catch (IOException e) {
-                    System.err.println("Error sending PvPGameModel");
-                }
+        if (player1Session.isOpen()) {
+            sendGameSessionState(player1Session);
+        }
+        if (player2Session.isOpen()) {
+            sendGameSessionState(player2Session);
+        }
+    }
+
+    private void sendGameSessionState(WebSocketSession playerSession) {
+        synchronized (playerSession) {
+            try {
+                ObjectMapper objectMapper = new ObjectMapper();
+                ObjectNode objectNode = objectMapper.createObjectNode();
+                objectNode.put("eventType", "updateGameSession");
+                objectNode.put("pvPGameModel", pvPGameModel.serialize());
+
+                String jsonMessage = objectMapper.writeValueAsString(objectNode);
+
+                playerSession.sendMessage(new TextMessage(jsonMessage));
+            } catch (IOException e) {
+                log.error("Error sending PvPGameModel");
+                e.printStackTrace();
             }
         }
     }

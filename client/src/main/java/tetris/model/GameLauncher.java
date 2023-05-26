@@ -31,6 +31,7 @@ public class GameLauncher {
     private Player currentPlayer;
     private GamePanel gamePanel;
 
+    private boolean isGameActive = false;
     private SwingWorker<Void, Void> worker;
 
     private boolean backgroundMusicIsDisable = true;
@@ -76,11 +77,23 @@ public class GameLauncher {
     }
 
     public void startGame(){
-        if (webSocketClient != null) {
-            startPvpGame();
-        }else {
-            startSoloGame();
+        if (webSocketClient != null &&!isGameActive) {
+            doRequestToStartGame();
+            return;
         }
+        if (backgroundMusicIsDisable) {
+            arrayOfSounds[soundIndex].start();
+            backgroundMusicIsDisable = false;
+        }
+        worker = new SwingWorker<>() {
+            @Override
+            protected Void doInBackground(){
+                gameModel.startGame();
+                return null;
+            }
+        };
+        worker.execute();
+        LOGGER.info("Game started");
     }
 
     public void connectToServer() {
@@ -91,25 +104,13 @@ public class GameLauncher {
         }
     }
 
-//    public void destroyWebSocketClient() {
-//        webSocketClient = null;
-//    }
-
-    public void displayPvPGameField() {
+    private void doRequestToStartGame() {
         if (webSocketClient != null) {
-            gameModel = new PvPGameModel(this);
-            tetrominoController.setGameModel(gameModel);
-            launcherView.displayPvPGameMode(gameModel);
-        }
-    }
-
-    public void startPvpGame() {
-        if (webSocketClient != null) {
-            //Отправляем запрос к серверу о старте игры
             ObjectMapper objectMapper = new ObjectMapper();
             try {
                 ObjectNode message = objectMapper.createObjectNode();
-                message.put("eventType", "createPvPGameSession");
+                message.put("eventType", "startGame");
+                message.put("sessionId", ((PvPGameModel) gameModel).getPvPGameSession().getSessionId());
 
                 String jsonMessage = objectMapper.writeValueAsString(message);
 
@@ -117,46 +118,42 @@ public class GameLauncher {
             } catch (JsonProcessingException e) {
                 e.printStackTrace();
             }
+        }
+    }
 
-            if (backgroundMusicIsDisable) {
-                arrayOfSounds[soundIndex].start();
-                backgroundMusicIsDisable = false;
+
+//    public void destroyWebSocketClient() {
+//        webSocketClient = null;
+//    }
+
+    public void displayPvPGameField(PvPGameSession pvPGameSession) {
+        if (webSocketClient != null) {
+            gameModel = new PvPGameModel(this, pvPGameSession);
+            tetrominoController.setGameModel(gameModel);
+            launcherView.displayPvPGameMode(gameModel);
+        }
+    }
+
+    public void findPvPGameSession() {
+        if (webSocketClient != null) {
+            ObjectMapper objectMapper = new ObjectMapper();
+            try {
+                ObjectNode message = objectMapper.createObjectNode();
+                message.put("eventType", "findPvPGameSession");
+
+                String jsonMessage = objectMapper.writeValueAsString(message);
+
+                webSocketClient.sendMessage(jsonMessage);
+            } catch (JsonProcessingException e) {
+                e.printStackTrace();
             }
-            worker = new SwingWorker<>() {
-                @Override
-                protected Void doInBackground(){
-                    gameModel.startGame();
-                    return null;
-                }
-            };
-            worker.execute();
-            LOGGER.info("Pvp game started");
         }
     }
 
     public void updatePvPGameSession(PvPGameSession gameSession) {
         if (webSocketClient != null){
-            if (!navigationPanel.getPlayStatus()) {
-                navigationPanel.getPlayOrPauseButton().doClick();
-            }
             ((  PvPGameModel) gameModel).setPvPGameSession(gameSession);
         }
-    }
-
-    public void startSoloGame() {
-        if (backgroundMusicIsDisable) {
-            arrayOfSounds[soundIndex].start();
-            backgroundMusicIsDisable = false;
-        }
-        worker = new SwingWorker<>() {
-            @Override
-            protected Void doInBackground() {
-                gameModel.startGame();
-                return null;
-            }
-        };
-        worker.execute();
-        LOGGER.info("Solo game started");
     }
 
     public void stopGame(){

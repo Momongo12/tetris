@@ -1,6 +1,8 @@
 package tetris.view;
 
 import tetris.model.GameLauncher;
+import tetris.model.GameModel;
+
 import static tetris.resource.ResourceManager.*;
 
 import javax.swing.*;
@@ -9,13 +11,14 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class GameOverPanel extends JPanel implements ActionListener {
-    GameLauncher gameLauncher;
-
+    private final GameLauncher gameLauncher;
+    private final GameModel gameModel;
     private JButton toHomeButton;
     private JButton restartButton;
 
-    GameOverPanel(GameLauncher gameLauncher){
+    GameOverPanel(GameLauncher gameLauncher, String playerSessionId){
         this.gameLauncher = gameLauncher;
+        this.gameModel = gameLauncher.getGameModel();
         setPreferredSize(new Dimension(250, 500));
         setBackground(new Color(0, 0, 0, 128));
         setFocusable(false);
@@ -39,6 +42,15 @@ public class GameOverPanel extends JPanel implements ActionListener {
         gameOverTextAndTetrisLogoBox.add(createPanelOffset(250, 10));
         gameOverTextAndTetrisLogoBox.add(gameOverTextLabel);
 
+
+        add(gameOverTextAndTetrisLogoBox, BorderLayout.PAGE_START);
+
+        if (playerSessionId.equals(gameModel.getOwnSessionId())) {
+            addButtonsNavigation();
+        }
+    }
+
+    private void addButtonsNavigation() {
         toHomeButton = createButtonForGameOverPanel("Home");
         toHomeButton.addActionListener(this);
 
@@ -52,7 +64,6 @@ public class GameOverPanel extends JPanel implements ActionListener {
         toHomeAndRestartButtonsBox.add(restartButton, BorderLayout.LINE_END);
         toHomeAndRestartButtonsBox.setBorder(BorderFactory.createEmptyBorder(0, 0, 10, 0));
 
-        add(gameOverTextAndTetrisLogoBox, BorderLayout.PAGE_START);
         add(toHomeAndRestartButtonsBox, BorderLayout.PAGE_END);
     }
 

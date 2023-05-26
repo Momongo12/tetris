@@ -30,28 +30,18 @@ public class PvPGameModel implements GameModel {
     private final WebSocketClient webSocketClient;
 
     private GamePanel gamePanel;
-    private InfoPanel infoPanelPlayer1;
-    private InfoPanel infoPanelPlayer2;
-    private GameMatrix gameMatrixPlayer1;
-    private GameMatrix gameMatrixPlayer2;
-    private NextShapePanel nextShapePanelPlayer1;
-    private NextShapePanel nextShapePanelPlayer2;
-    private HoldPanel holdPanelPlayer1;
-    private HoldPanel holdPanelPlayer2;
-    private LevelPanel levelPanelPlayer1;
-    private LevelPanel levelPanelPlayer2;
 
-    public PvPGameModel(GameLauncher gameLauncher) {
-        this.pvPGameSession = new PvPGameSession();
-        initBoard(pvPGameSession.getGameMatrixPlayer1());
-        initBoard(pvPGameSession.getGameMatrixPlayer2());
-        this.gameLauncher = gameLauncher;
+    public PvPGameModel(GameLauncher gameLauncher, PvPGameSession pvPGameSession) {
         this.webSocketClient = gameLauncher.getWebSocketClient();
+        this.pvPGameSession = pvPGameSession;
+        pvPGameSession.setGameMatrixPlayer1(createBoard());
+        pvPGameSession.setGameMatrixPlayer2(createBoard());
+        this.gameLauncher = gameLauncher;
         initSounds();
     }
 
-    private void initBoard(ArrayList<Square[]> board) {
-        board = new ArrayList<>();
+    private ArrayList<Square[]> createBoard() {
+        ArrayList<Square[]> board = new ArrayList<>();
         for (int i = 0; i < ROWS; i++) {
             board.add(i, new Square[COLUMNS]);
             for (int j = 0; j < COLUMNS; j++) {
@@ -60,6 +50,7 @@ public class PvPGameModel implements GameModel {
                 board.get(i)[j] = new Square(x, y, i, j, boardColor);
             }
         }
+        return board;
     }
 
     public void initSounds(){
@@ -100,11 +91,25 @@ public class PvPGameModel implements GameModel {
             } catch (Exception e) {
                 e.printStackTrace();
             }
+            if (pvPGameSession.isGameOverPlayer1()) {
+                endGame(pvPGameSession.getPlayer1SessionId());
+            }else if (pvPGameSession.isGameOverPlayer2()) {
+                endGame(pvPGameSession.getPlayer2SessionId());
+            }
             gamePanel.repaint();
         }
     }
 
     public void pauseGame() {
+
+    }
+
+    private void endGame(String playerSessionId) {
+        gamePanel.displayGameOverPanel(playerSessionId);
+        if (playerSessionId.equals(getOwnSessionId())){
+            gameLauncher.getNavigationPanel().getPlayOrPauseButton().doClick();
+            gameLauncher.updateStatisticPlayer(getScore(playerSessionId), getLines(playerSessionId), getLevel(playerSessionId));
+        }
 
     }
 
@@ -162,98 +167,72 @@ public class PvPGameModel implements GameModel {
         this.gamePanel = gamePanel;
     }
 
-    public void addInfoPanel(InfoPanel infoPanel) {
-        if (infoPanelPlayer1 == null) {
-            infoPanelPlayer1 = infoPanel;
+    public String getOwnSessionId() {
+        if (webSocketClient.getSessionId().equals(pvPGameSession.getPlayer1SessionId())){
+            return pvPGameSession.getPlayer1SessionId();
         }else {
-            infoPanelPlayer2 = infoPanel;
+            return pvPGameSession.getPlayer2SessionId();
         }
     }
 
-
-    public void addGameMatrix(GameMatrix gameMatrix) {
-        if (gameMatrixPlayer1 == null) {
-            gameMatrixPlayer1 = gameMatrix;
+    public String getOpponentSessionId() {
+        if (webSocketClient.getSessionId().equals(pvPGameSession.getPlayer1SessionId())){
+            return pvPGameSession.getPlayer2SessionId();
         }else {
-            gameMatrixPlayer2 = gameMatrix;
+            return pvPGameSession.getPlayer1SessionId();
         }
     }
 
-    public void addNextShapePanel(NextShapePanel nextShapePanel) {
-        if (nextShapePanelPlayer1 == null) {
-            nextShapePanelPlayer1 = nextShapePanel;
-        }else {
-            nextShapePanelPlayer2 = nextShapePanel;
-        }
-    }
-
-    public void addHoldPanel(HoldPanel holdPanel) {
-        if (holdPanelPlayer1 == null) {
-            holdPanelPlayer1 = holdPanel;
-        }else {
-            holdPanelPlayer2 = holdPanel;
-        }
-    }
-
-    public void addLevelPanel(LevelPanel levelPanel) {
-        if (levelPanelPlayer1 == null) {
-            levelPanelPlayer1 = levelPanel;
-        }else {
-            levelPanelPlayer2 = levelPanel;
-        }
-    }
-
-
-    public int getLines(InfoPanel infoPanel) {
-        if (infoPanel == infoPanelPlayer1){
+    public int getLines(String playerSessionId) {
+        if (playerSessionId.equals(pvPGameSession.getPlayer1SessionId())){
             return pvPGameSession.getLinesClearedPlayer1();
         }else {
             return pvPGameSession.getLinesClearedPlayer2();
         }
     }
 
-    public int getScore(InfoPanel infoPanel) {
-        if (infoPanel == infoPanelPlayer1) {
+    public int getScore(String playerSessionId) {
+        if (playerSessionId.equals(pvPGameSession.getPlayer1SessionId())){
             return pvPGameSession.getScorePlayer1();
         }else {
             return pvPGameSession.getScorePlayer2();
         }
     }
 
-    public int getLevel(LevelPanel levelPanel) {
-        if (levelPanel == levelPanelPlayer1) {
+    public int getLevel(String playerSessionId) {
+        if (playerSessionId.equals(pvPGameSession.getPlayer1SessionId())){
             return pvPGameSession.getLevelPlayer1();
         }else {
             return pvPGameSession.getLevelPlayer2();
         }
     }
 
-    public ArrayList<Square[]> getBoard(GameMatrix gameMatrix) {
-        if (gameMatrix == gameMatrixPlayer1) {
+    public ArrayList<Square[]> getBoard(String playerSessionId) {
+        if (playerSessionId.equals(pvPGameSession.getPlayer1SessionId())){
             return pvPGameSession.getGameMatrixPlayer1();
         }else {
             return pvPGameSession.getGameMatrixPlayer2();
         }
     }
 
-    public Tetromino getTetromino(GameMatrix gameMatrix) {
-        if (gameMatrix == gameMatrixPlayer1) {
+    public Tetromino getTetromino(String playerSessionId) {
+        if (playerSessionId.equals(pvPGameSession.getPlayer1SessionId())){
             return pvPGameSession.getTetrominoPlayer1();
         }else {
             return pvPGameSession.getTetrominoPlayer2();
         }
     }
 
-    public Tetromino getNextTetromino(NextShapePanel nextShapePanel) {
-        if (nextShapePanel == nextShapePanelPlayer1) {
+    public Tetromino getNextTetromino(String playerSessionId) {
+        if (playerSessionId.equals(pvPGameSession.getPlayer1SessionId())){
             return pvPGameSession.getNextTetrominoPlayer1();
         }else {
             return pvPGameSession.getNextTetrominoPlayer2();
         }
     }
 
-    public Tetromino getHoldTetromino(HoldPanel holdPanel) {
-        if (holdPanel == holdPanelPlayer1) {
+    public Tetromino getHoldTetromino(String playerSessionId) {
+        if (playerSessionId.equals(pvPGameSession.getPlayer1SessionId())){
             return pvPGameSession.getHoldTetrominoPlayer1();
         }else {
             return pvPGameSession.getHoldTetrominoPlayer2();
@@ -262,5 +241,9 @@ public class PvPGameModel implements GameModel {
 
     public void setPvPGameSession(PvPGameSession pvPGameSession) {
         this.pvPGameSession = pvPGameSession;
+    }
+
+    public PvPGameSession getPvPGameSession() {
+        return pvPGameSession;
     }
 }

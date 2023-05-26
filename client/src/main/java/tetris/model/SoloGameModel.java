@@ -10,11 +10,14 @@ import tetris.view.*;
 import javax.sound.sampled.*;
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.UUID;
 
 
 public class SoloGameModel implements GameModel {
     private final int stepIncremetialOfGameSpeed = 200;
     private final int initialGameSpeed = 1000;
+
+    private final String ownPlayerSessionId;
     private int gameSpeed = 1000;
     private int level = 1;
     private int score = 0;
@@ -45,6 +48,7 @@ public class SoloGameModel implements GameModel {
     private Clip moveSound, rotateSound, dropSound;
 
     public SoloGameModel(GameLauncher gameLauncher) {
+        ownPlayerSessionId = UUID.randomUUID().toString();
         this.gameLauncher = gameLauncher;
         gameIsActive = false;
         gameOver = false;
@@ -59,24 +63,11 @@ public class SoloGameModel implements GameModel {
         this.gamePanel = gamePanel;
     }
 
-    public void addInfoPanel(InfoPanel infoPanel) {
-        this.infoPanel = infoPanel;
+    public String getOwnSessionId() {
+        return ownPlayerSessionId;
     }
-
-    public void addGameMatrix(GameMatrix gameMatrix) {
-        this.gameMatrix = gameMatrix;
-    }
-
-    public void addNextShapePanel(NextShapePanel nextShapePanel) {
-        this.nextShapePanel = nextShapePanel;
-    }
-
-    public void addHoldPanel(HoldPanel holdPanel) {
-        this.holdPanel = holdPanel;
-    }
-
-    public void addLevelPanel(LevelPanel levelPanel) {
-        this.levelPanel = levelPanel;
+    public String getOpponentSessionId() {
+        return null;
     }
 
     public void initSounds() {
@@ -167,7 +158,7 @@ public class SoloGameModel implements GameModel {
     }
 
     private void endGame() {
-        gamePanel.displayGameOverPanel(gameMatrix);
+        gamePanel.displayGameOverPanel(ownPlayerSessionId);
         gameLauncher.getNavigationPanel().getPlayOrPauseButton().doClick();
         gameLauncher.updateStatisticPlayer(score, lines, level);
     }
@@ -285,23 +276,31 @@ public class SoloGameModel implements GameModel {
         return gameIsActive;
     }
 
-    public int getScore(InfoPanel infoPanel) {
+    public int getScore(String playerSessionId) {
         return score;
     }
 
-    public int getLines(InfoPanel infoPanel) {
+    public int getLines(String playerSessionId) {
         return lines;
     }
 
-    public int getLevel(LevelPanel levelPanel) {
+    public int getLevel(String playerSessionId) {
         return level;
     }
 
-    public Tetromino getNextTetromino(NextShapePanel nextShapePanel) {
+    public ArrayList<Square[]> getBoard(String playerSessionId) {
+        return board;
+    }
+
+    public Tetromino getTetromino(String playerSessionId) {
+        return tetromino;
+    }
+
+    public Tetromino getNextTetromino(String playerSessionId) {
         return nextTetromino;
     }
 
-    public Tetromino getHoldTetromino(HoldPanel holdPanel) {
+    public Tetromino getHoldTetromino(String playerSessionId) {
         return holdTetromino;
     }
 
@@ -312,13 +311,5 @@ public class SoloGameModel implements GameModel {
 
     private void updateGameSpeed(int level) {
         this.gameSpeed = initialGameSpeed - (level - 1) * stepIncremetialOfGameSpeed;
-    }
-
-    public ArrayList<Square[]> getBoard(GameMatrix gameMatrix) {
-        return board;
-    }
-
-    public Tetromino getTetromino(GameMatrix gameMatrix) {
-        return tetromino;
     }
 }

@@ -5,26 +5,26 @@ import org.springframework.web.socket.WebSocketSession;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 @Service
-public class PvPGameSessionMatcherImpl implements PvPGameSessionMatcher{
+public class PvPGameSessionMatcherImpl implements PvPGameSessionMatcher {
     private List<WebSocketSession> waitingPlayers = new ArrayList<>();
     private Map<String, PvPGameSession> pvPGameSessions = new ConcurrentHashMap<>();
 
-    public void createPvPGameSession(WebSocketSession playerSession) {
+    public PvPGameSession createPvPGameSession(WebSocketSession playerSession) {
         if (waitingPlayers.contains(playerSession)) {
-            waitingPlayers.remove(playerSession);
-            WebSocketSession player2Session = waitingPlayers.remove(0);
-            PvPGameSession pvPGameSession = new PvPGameSession(playerSession, player2Session);
-            pvPGameSessions.put(pvPGameSession.getPvPGameModel().getSessionId(), pvPGameSession);
+            if (waitingPlayers.size() >= 2) {
+                waitingPlayers.remove(playerSession);
+                WebSocketSession player2Session = waitingPlayers.remove(0);
 
-            ExecutorService executorService = Executors.newSingleThreadExecutor();
-            executorService.execute(pvPGameSession::startGame);
+                PvPGameSession pvPGameSession = new PvPGameSession(playerSession, player2Session);
+                pvPGameSessions.put(pvPGameSession.getPvPGameModel().getSessionId(), pvPGameSession);
+
+                return pvPGameSession;
+            }
         }
+        return null;
     }
-
     public void addWaitingPlayerSession(WebSocketSession session) {
         waitingPlayers.add(session);
     }

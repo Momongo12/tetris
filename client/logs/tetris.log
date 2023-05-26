@@ -1,6 +1,15 @@
-23:21:16 DEBUG t.m.SoloGameModel [main] Game sounds loaded
-23:21:18 DEBUG t.m.GameLauncher [main] background sounds loaded
-23:21:18 INFO t.m.GameLauncher [main] Launcher started
-23:21:23 INFO t.m.GameLauncher [AWT-EventQueue-0] Player log in
-23:21:28 DEBUG t.m.SoloGameModel [AWT-EventQueue-0] Game sounds loaded
-23:22:01 INFO t.m.GameLauncher [AWT-EventQueue-0] Pvp game started
+03:03:01 DEBUG t.m.SoloGameModel [main] Game sounds loaded
+03:03:05 DEBUG t.m.GameLauncher [main] background sounds loaded
+03:03:05 INFO t.m.GameLauncher [main] Launcher started
+03:03:32 INFO t.m.GameLauncher [AWT-EventQueue-0] Player log in
+03:03:33 DEBUG t.m.SoloGameModel [ tyrus-jdk-client-2] Game sounds loaded
+03:03:52 INFO t.m.GameLauncher [ tyrus-jdk-client-3] Game started
+03:04:06 INFO t.m.GameLauncher [SwingWorker-pool-2-thread-1] Game stopped
+03:04:06 INFO t.m.GameLauncher [SwingWorker-pool-2-thread-1] Game started
+03:04:08 INFO t.m.GameLauncher [SwingWorker-pool-2-thread-2] Game stopped
+03:04:08 INFO t.m.GameLauncher [SwingWorker-pool-2-thread-1] Game started
+03:04:08 INFO t.m.GameLauncher [SwingWorker-pool-2-thread-2] Game stopped
+03:04:08 INFO t.m.GameLauncher [SwingWorker-pool-2-thread-3] Game started
+03:04:09 INFO t.m.GameLauncher [SwingWorker-pool-2-thread-1] Game stopped
+03:04:09 INFO t.m.GameLauncher [SwingWorker-pool-2-thread-4] Game started
+03:04:10 INFO t.m.GameLauncher [SwingWorker-pool-2-thread-5] Game stopped

@@ -12,6 +12,8 @@ import java.util.UUID;
 @Data
 public class PvPGameSession {
     private String sessionId;
+    private final String player1SessionId;
+    private final String player2SessionId;
     private int scorePlayer1;
     private int scorePlayer2;
     private int levelPlayer1;
@@ -30,6 +32,8 @@ public class PvPGameSession {
     private Tetromino holdTetrominoPlayer1;
     private Tetromino holdTetrominoPlayer2;
     public PvPGameSession() {
+        this.player1SessionId = null;
+        this.player2SessionId = null;
         this.sessionId = UUID.randomUUID().toString();
         this.scorePlayer1 = 0;
         this.scorePlayer2 = 0;

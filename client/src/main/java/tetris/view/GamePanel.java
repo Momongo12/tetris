@@ -26,12 +26,12 @@ public class GamePanel extends JPanel {
         gameLauncher.setGamePanel(this);
         this.gameModel = gameLauncher.getGameModel();
         gameModel.setGamePanel(this);
-        infoPanel1 = new InfoPanel(gameModel);
-        gameMatrix1 = new GameMatrix(gameModel);
+        infoPanel1 = new InfoPanel(gameModel, gameModel.getOwnSessionId());
+        gameMatrix1 = new GameMatrix(gameModel,gameModel.getOwnSessionId());
         navigationPanel = new NavigationPanel(gameLauncher);
-        nextShapePanel1 = new NextShapePanel(gameModel);
-        holdPanel1 = new HoldPanel(gameModel);
-        levelPanel1 = new LevelPanel(gameModel);
+        nextShapePanel1 = new NextShapePanel(gameModel,gameModel.getOwnSessionId());
+        holdPanel1 = new HoldPanel(gameModel,gameModel.getOwnSessionId());
+        levelPanel1 = new LevelPanel(gameModel, gameModel.getOwnSessionId());
 
         setPreferredSize(new Dimension(1120, 700));
         setSize(getPreferredSize());
@@ -82,18 +82,18 @@ public class GamePanel extends JPanel {
     public void displayPvPGameMode(GameModel gameModel) {
         this.gameModel = gameModel;
         gameModel.setGamePanel(this);
-        infoPanel1 = new InfoPanel(gameModel);
-        gameMatrix1 = new GameMatrix(gameModel);
+        infoPanel1 = new InfoPanel(gameModel, gameModel.getOwnSessionId());
+        gameMatrix1 = new GameMatrix(gameModel, gameModel.getOwnSessionId());
         navigationPanel = new NavigationPanel(gameLauncher);
-        nextShapePanel1 = new NextShapePanel(gameModel);
-        holdPanel1 = new HoldPanel(gameModel);
-        levelPanel1 = new LevelPanel(gameModel);
+        nextShapePanel1 = new NextShapePanel(gameModel, gameModel.getOwnSessionId());
+        holdPanel1 = new HoldPanel(gameModel, gameModel.getOwnSessionId());
+        levelPanel1 = new LevelPanel(gameModel, gameModel.getOwnSessionId());
 
-        infoPanel2 = new InfoPanel(gameModel);
-        gameMatrix2 = new GameMatrix(gameModel);
-        nextShapePanel2 = new NextShapePanel(gameModel);
-        holdPanel2 = new HoldPanel(gameModel);
-        levelPanel2 = new LevelPanel(gameModel);
+        infoPanel2 = new InfoPanel(gameModel, gameModel.getOpponentSessionId());
+        gameMatrix2 = new GameMatrix(gameModel, gameModel.getOpponentSessionId());
+        nextShapePanel2 = new NextShapePanel(gameModel, gameModel.getOpponentSessionId());
+        holdPanel2 = new HoldPanel(gameModel, gameModel.getOpponentSessionId());
+        levelPanel2 = new LevelPanel(gameModel, gameModel.getOpponentSessionId());
 
         JPanel gameAndQueue1 = new JPanel();
         gameAndQueue1.setLayout(new BorderLayout());
@@ -185,17 +185,15 @@ public class GamePanel extends JPanel {
         return gameField;
     }
 
-    public void displayGameOverPanel(GameMatrix gameMatrix){
-        if (gameMatrix != gameMatrix1) {
+    public void displayGameOverPanel(String playerSessionId){
+        if (playerSessionId.equals(gameMatrix1.getPlayerSessionId())) {
             gameField1.removeAll();
-            gameField1.add(new GameOverPanel(gameLauncher));
-            gameMatrix1 = null;
+            gameField1.add(new GameOverPanel(gameLauncher, gameMatrix1.getPlayerSessionId()));
             repaint();
             revalidate();
         }else {
             gameField2.removeAll();
-            gameField2.add(new GameOverPanel(gameLauncher));
-            gameMatrix2 = null;
+            gameField2.add(new GameOverPanel(gameLauncher, gameMatrix2.getPlayerSessionId()));
             repaint();
             revalidate();
         }

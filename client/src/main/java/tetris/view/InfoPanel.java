@@ -1,7 +1,7 @@
 package tetris.view;
 
 import tetris.model.GameModel;
-import tetris.model.SoloGameModel;
+
 import static tetris.resource.ResourceManager.*;
 
 import javax.swing.*;
@@ -9,6 +9,7 @@ import java.awt.*;
 
 public class InfoPanel extends JPanel {
     private GameModel gameModel;
+    private final String playerSessionId;
 
     private final int WIGHT = 120;
     private final int HEIGHT = 55;
@@ -17,9 +18,9 @@ public class InfoPanel extends JPanel {
 
     private JLabel scoreLabel;
 
-    public InfoPanel(GameModel gameModel){
+    public InfoPanel(GameModel gameModel, String playerSessionId){
         this.gameModel = gameModel;
-        gameModel.addInfoPanel(this);
+        this.playerSessionId = playerSessionId;
 
         JLabel linesBoxLabel = new JLabel();
         linesBoxLabel.setIcon(getImg("linesBackground.png", WIGHT, HEIGHT));
@@ -38,7 +39,7 @@ public class InfoPanel extends JPanel {
         linesTextLabel.setFocusable(false);
         linesTextLabel.setBackground(new Color(0, 0, 0, 0));
         
-        linesLabel = new JLabel("   " + gameModel.getLines(this));
+        linesLabel = new JLabel("   " + gameModel.getLines(playerSessionId));
         linesLabel.setFont(new Font("Showcard Gothic", Font.PLAIN, 23));
         linesLabel.setForeground(Color.BLACK);
         linesLabel.setPreferredSize(new Dimension(120, 30));
@@ -70,7 +71,7 @@ public class InfoPanel extends JPanel {
         scoreTextLabel.setFocusable(false);
         scoreTextLabel.setBackground(new Color(0, 0, 0, 0));
 
-        scoreLabel = new JLabel("   " + gameModel.getScore(this));
+        scoreLabel = new JLabel("   " + gameModel.getScore(playerSessionId));
         scoreLabel.setFont(new Font("Showcard Gothic", Font.PLAIN, 23));
         scoreLabel.setForeground(Color.BLACK);
         scoreLabel.setPreferredSize(new Dimension(120, 30));
@@ -99,10 +100,10 @@ public class InfoPanel extends JPanel {
     public void paintComponent(Graphics g){
 
         linesLabel.removeAll();
-        linesLabel.setText("   " + gameModel.getLines(this));
+        linesLabel.setText("   " + gameModel.getLines(playerSessionId));
 
         scoreLabel.removeAll();
-        scoreLabel.setText("   " + gameModel.getScore(this));
+        scoreLabel.setText("   " + gameModel.getScore(playerSessionId));
         super.paintComponent(g);
     }
 

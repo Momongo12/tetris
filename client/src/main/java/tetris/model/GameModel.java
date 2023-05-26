@@ -8,24 +8,21 @@ public interface GameModel {
 
     void startGame();
     void pauseGame();
+    boolean getGameStatus();
 
     void moveTetromino(int direction);
     void rotateTetromino();
     void holdTetromino();
 
-    boolean getGameStatus();
     void setGamePanel(GamePanel gamePanel);
-    void addInfoPanel(InfoPanel infoPanel);
-    void addGameMatrix(GameMatrix gameMatrix);
-    void addNextShapePanel(NextShapePanel nextShapePanel);
-    void addHoldPanel(HoldPanel holdPanel);
-    void addLevelPanel(LevelPanel levelPanel);
+    String getOwnSessionId();
+    String getOpponentSessionId();
 
-    int getLines(InfoPanel infoPanel);
-    int getScore(InfoPanel infoPanel);
-    int getLevel(LevelPanel levelPanel);
-    ArrayList<Square[]> getBoard(GameMatrix gameMatrix);
-    Tetromino getTetromino(GameMatrix gameMatrix);
-    Tetromino getNextTetromino(NextShapePanel nextShapePanel);
-    Tetromino getHoldTetromino(HoldPanel holdPanel);
+    int getLines(String playerSessionId);
+    int getScore(String playerSessionId);
+    int getLevel(String playerSessionId);
+    ArrayList<Square[]> getBoard(String playerSessionId);
+    Tetromino getTetromino(String playerSessionId);
+    Tetromino getNextTetromino(String playerSessionId);
+    Tetromino getHoldTetromino(String playerSessionId);
 }

@@ -1,7 +1,7 @@
 package tetris.view;
 
 import tetris.model.GameModel;
-import tetris.model.SoloGameModel;
+
 import static tetris.resource.ResourceManager.*;
 
 import javax.swing.*;
@@ -9,15 +9,17 @@ import java.awt.*;
 
 public class LevelPanel extends JLabel {
     GameModel gameModel;
+    private final String playerSessionId;
     private JLabel levelLabel;
 
     private final int WIGHT = 120;
     private final int HEIGHT = 55;
 
-    public LevelPanel(GameModel gameModel){
+    public LevelPanel(GameModel gameModel, String playerSessionId){
         this.gameModel = gameModel;
-        gameModel.addLevelPanel(this);
-        levelLabel = new JLabel("   " + gameModel.getLevel(this));
+        this.playerSessionId = playerSessionId;
+
+        levelLabel = new JLabel("   " + gameModel.getLevel(playerSessionId));
         levelLabel.setFont(new Font("Showcard Gothic", Font.PLAIN, 23));
         levelLabel.setForeground(Color.BLACK);
         levelLabel.setPreferredSize(new Dimension(120, 30));
@@ -48,7 +50,7 @@ public class LevelPanel extends JLabel {
     public void paintComponent(Graphics g){
         super.paintComponent(g);
         levelLabel.removeAll();
-        levelLabel.setText("   " + gameModel.getLevel(this));
+        levelLabel.setText("   " + gameModel.getLevel(playerSessionId));
     }
 
     public void setGameModel(GameModel gameModel) {

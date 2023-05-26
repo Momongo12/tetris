@@ -1,7 +1,6 @@
 package tetris.view;
 
 import tetris.model.GameModel;
-import tetris.model.SoloGameModel;
 import tetris.model.Tetromino;
 
 import javax.swing.*;
@@ -10,10 +9,12 @@ import java.util.ArrayList;
 
 public class GameMatrix extends JPanel {
     private GameModel gameModel;
+    private final String playerSessionId;
     private int BLOCK_SIZE = 25;
-    GameMatrix(GameModel gameModel){
+    GameMatrix(GameModel gameModel, String playerSessionId){
         this.gameModel = gameModel;
-        gameModel.addGameMatrix(this);
+        this.playerSessionId = playerSessionId;
+
         setPreferredSize(new Dimension(250, 500));
         setSize(getPreferredSize());
         setFocusable(false);
@@ -25,7 +26,7 @@ public class GameMatrix extends JPanel {
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
         Graphics2D g2 = (Graphics2D)g;
-        ArrayList<Square[]> board = gameModel.getBoard(this);
+        ArrayList<Square[]> board = gameModel.getBoard(playerSessionId);
         if (board != null) {
             for (int i = 0; i < board.size(); i++) {
                 for (int j = 0; j < board.get(i).length; j++) {
@@ -39,7 +40,7 @@ public class GameMatrix extends JPanel {
                 }
             }
         }
-        Tetromino tetromino = gameModel.getTetromino(this);
+        Tetromino tetromino = gameModel.getTetromino(playerSessionId);
         if (tetromino != null) drawTetromino(g2, tetromino);
     }
 
@@ -56,8 +57,7 @@ public class GameMatrix extends JPanel {
         }
         g.dispose();
     }
-
-    public void setGameModel(GameModel gameModel) {
-        this.gameModel = gameModel;
+    public String getPlayerSessionId() {
+        return playerSessionId;
     }
 }
