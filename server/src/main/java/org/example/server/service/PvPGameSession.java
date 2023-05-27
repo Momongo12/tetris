@@ -1,7 +1,6 @@
 package org.example.server.service;
 
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import lombok.Data;
@@ -58,29 +57,58 @@ public class PvPGameSession {
 
     public void startGame() {
         log.info("game started");
-        while (!pvPGameModel.isGameOverPlayer1() || !pvPGameModel.isGameOverPlayer2()) {
-            try {
-                Thread.sleep(pvPGameModel.getGameSpeed());
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            if (tetrominoIsTouchedGround(pvPGameModel.getTetrominoPlayer1(), pvPGameModel.getGameMatrixPlayer1())) {
-                putTetrominoOnGround(pvPGameModel.getTetrominoPlayer1(), pvPGameModel.getGameMatrixPlayer1());
-                updateTetrominoByPlayerSession(player1Session);
-                updateGameOverStateByPlayerSession(player1Session);
-            } else {
-                moveTetromino(pvPGameModel.getTetrominoPlayer1(), pvPGameModel.getGameMatrixPlayer1(), 2, player1Session);
-            }
+        new Thread(() -> {
+            while (!pvPGameModel.isGameOverPlayer1()) {
+                try {
+                    Thread.sleep(pvPGameModel.getGameSpeed());
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                if (tetrominoIsTouchedGround(pvPGameModel.getTetrominoPlayer1(), pvPGameModel.getGameMatrixPlayer1())) {
+                    putTetrominoOnGround(pvPGameModel.getTetrominoPlayer1(), pvPGameModel.getGameMatrixPlayer1());
+                    updateTetrominoByPlayerSession(player1Session);
+                    updateGameOverStateByPlayerSession(player1Session);
+                } else {
+                    moveTetromino(pvPGameModel.getTetrominoPlayer1(), pvPGameModel.getGameMatrixPlayer1(), 2, player1Session);
+                }
 
-            if (tetrominoIsTouchedGround(pvPGameModel.getTetrominoPlayer2(), pvPGameModel.getGameMatrixPlayer2())) {
-                putTetrominoOnGround(pvPGameModel.getTetrominoPlayer2(), pvPGameModel.getGameMatrixPlayer2());
-                updateTetrominoByPlayerSession(player2Session);
-                updateGameOverStateByPlayerSession(player2Session);
-            } else {
-                moveTetromino(pvPGameModel.getTetrominoPlayer2(), pvPGameModel.getGameMatrixPlayer2(), 2, player2Session);
+                sendPlayersGameSessionState();
             }
-
+            destroyPlayerSessionData(player1Session);
             sendPlayersGameSessionState();
+        }).start();
+
+        new Thread(() -> {
+            while (!pvPGameModel.isGameOverPlayer2()) {
+                try {
+                    Thread.sleep(pvPGameModel.getGameSpeed());
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                if (tetrominoIsTouchedGround(pvPGameModel.getTetrominoPlayer2(), pvPGameModel.getGameMatrixPlayer2())) {
+                    putTetrominoOnGround(pvPGameModel.getTetrominoPlayer2(), pvPGameModel.getGameMatrixPlayer2());
+                    updateTetrominoByPlayerSession(player2Session);
+                    updateGameOverStateByPlayerSession(player2Session);
+                } else {
+                    moveTetromino(pvPGameModel.getTetrominoPlayer2(), pvPGameModel.getGameMatrixPlayer2(), 2, player2Session);
+                }
+
+                sendPlayersGameSessionState();
+            }
+            destroyPlayerSessionData(player2Session);
+            sendPlayersGameSessionState();
+        }).start();
+    }
+
+    private void destroyPlayerSessionData(WebSocketSession playerSession){
+        if (playerSession.getId().equals(player1Session.getId())) {
+            pvPGameModel.setGameMatrixPlayer1(null);
+            pvPGameModel.setHoldTetrominoPlayer1(null);
+            pvPGameModel.setNextTetrominoPlayer1(null);
+        }else {
+            pvPGameModel.setGameMatrixPlayer2(null);
+            pvPGameModel.setHoldTetrominoPlayer2(null);
+            pvPGameModel.setNextTetrominoPlayer2(null);
         }
     }
 

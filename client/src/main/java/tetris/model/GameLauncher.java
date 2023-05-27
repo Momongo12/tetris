@@ -109,7 +109,7 @@ public class GameLauncher {
             ObjectMapper objectMapper = new ObjectMapper();
             try {
                 ObjectNode message = objectMapper.createObjectNode();
-                message.put("eventType", "startGame");
+                message.put("eventType", "StartGame");
                 message.put("sessionId", ((PvPGameModel) gameModel).getPvPGameSession().getSessionId());
 
                 String jsonMessage = objectMapper.writeValueAsString(message);
@@ -122,9 +122,9 @@ public class GameLauncher {
     }
 
 
-//    public void destroyWebSocketClient() {
-//        webSocketClient = null;
-//    }
+    public void destroyWebSocketClient() {
+        webSocketClient = null;
+    }
 
     public void displayPvPGameField(PvPGameSession pvPGameSession) {
         if (webSocketClient != null) {
@@ -139,7 +139,7 @@ public class GameLauncher {
             ObjectMapper objectMapper = new ObjectMapper();
             try {
                 ObjectNode message = objectMapper.createObjectNode();
-                message.put("eventType", "findPvPGameSession");
+                message.put("eventType", "FindPvPGameSession");
 
                 String jsonMessage = objectMapper.writeValueAsString(message);
 

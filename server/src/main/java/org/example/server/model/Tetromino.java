@@ -28,6 +28,14 @@ public class Tetromino {
     private int row;
     private int col;
 
+    /**
+     * Creates a new Tetromino object with the specified type, position, and color.
+     *
+     * @param type  The type of the Tetromino.
+     * @param row   The row position of the Tetromino.
+     * @param col   The column position of the Tetromino.
+     * @param color The color of the Tetromino.
+     */
     public Tetromino(TetrominoType type, int row, int col, Color color) {
         this.type = type;
         this.row = row;

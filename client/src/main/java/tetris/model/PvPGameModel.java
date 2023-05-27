@@ -13,6 +13,7 @@ import javax.sound.sampled.Clip;
 import javax.sound.sampled.FloatControl;
 import javax.sound.sampled.LineEvent;
 import javax.sound.sampled.LineListener;
+import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
 
@@ -28,6 +29,8 @@ public class PvPGameModel implements GameModel {
     private final GameLauncher gameLauncher;
     private PvPGameSession pvPGameSession;
     private final WebSocketClient webSocketClient;
+    private SwingWorker<Void, Void> worker1;
+    private SwingWorker<Void, Void> worker2;
 
     private GamePanel gamePanel;
 
@@ -85,19 +88,40 @@ public class PvPGameModel implements GameModel {
 
 
     public void startGame() {
-        while (!pvPGameSession.isGameOverPlayer1() || !pvPGameSession.isGameOverPlayer2()) {
-            try {
-                Thread.sleep(pvPGameSession.getGameSpeed() / 2);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            if (pvPGameSession.isGameOverPlayer1()) {
+        worker1 = new SwingWorker<>() {
+            @Override
+            protected Void doInBackground(){
+                while (!pvPGameSession.isGameOverPlayer1()) {
+                    try {
+                        Thread.sleep(pvPGameSession.getGameSpeed() / 2);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    gamePanel.repaint();
+                }
                 endGame(pvPGameSession.getPlayer1SessionId());
-            }else if (pvPGameSession.isGameOverPlayer2()) {
-                endGame(pvPGameSession.getPlayer2SessionId());
+                return null;
             }
-            gamePanel.repaint();
-        }
+        };
+
+        worker2 = new SwingWorker<>() {
+            @Override
+            protected Void doInBackground(){
+                while (!pvPGameSession.isGameOverPlayer2()) {
+                    try {
+                        Thread.sleep(pvPGameSession.getGameSpeed() / 2);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    gamePanel.repaint();
+                }
+                endGame(pvPGameSession.getPlayer2SessionId());
+                return null;
+            }
+        };
+
+        worker1.execute();
+        worker2.execute();
     }
 
     public void pauseGame() {
@@ -117,7 +141,7 @@ public class PvPGameModel implements GameModel {
         ObjectMapper objectMapper = new ObjectMapper();
         try {
             ObjectNode message = objectMapper.createObjectNode();
-            message.put("eventType", "moveTetromino");
+            message.put("eventType", "MoveTetromino");
             message.put("direction", direction);
             message.put("sessionId", pvPGameSession.getSessionId());
 
@@ -133,7 +157,7 @@ public class PvPGameModel implements GameModel {
         ObjectMapper objectMapper = new ObjectMapper();
         try {
             ObjectNode message = objectMapper.createObjectNode();
-            message.put("eventType", "rotateTetromino");
+            message.put("eventType", "RotateTetromino");
             message.put("sessionId", pvPGameSession.getSessionId());
 
             String jsonMessage = objectMapper.writeValueAsString(message);
@@ -148,7 +172,7 @@ public class PvPGameModel implements GameModel {
         ObjectMapper objectMapper = new ObjectMapper();
         try {
             ObjectNode message = objectMapper.createObjectNode();
-            message.put("eventType", "holdTetromino");
+            message.put("eventType", "HoldTetromino");
             message.put("sessionId", pvPGameSession.getSessionId());
 
             String jsonMessage = objectMapper.writeValueAsString(message);

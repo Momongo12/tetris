@@ -38,8 +38,8 @@ public class ResourceManager {
     public static Clip[] getAllBackgroundSounds() throws LineUnavailableException, IOException, UnsupportedAudioFileException, URISyntaxException {
         URL soundUrl = ResourceManager.class.getClassLoader().getResource(PATH_TO_ROOT_SOUNDS_FOLDER + "backgroundSounds/");
         assert soundUrl != null;
-        File backgroundAudioFolder = new File(soundUrl.toURI());
-        File[] audioFiles = backgroundAudioFolder.listFiles();
+            File backgroundAudioFolder = new File(soundUrl.toURI());
+            File[] audioFiles = backgroundAudioFolder.listFiles();
 
         assert audioFiles != null;
 
