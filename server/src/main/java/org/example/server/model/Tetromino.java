@@ -17,6 +17,11 @@ import java.util.ArrayList;
 
 import static org.example.server.util.TetrisConstants.*;
 
+/**
+ * This class represent tetromino figure and methods for use it.
+ * @version 1.0
+ * @author Denis Moskvin
+ */
 public class Tetromino {
     private TetrominoType type;
     private boolean[][] shape;
@@ -103,10 +108,6 @@ public class Tetromino {
         shape = newShape;
         updateBlocks();
     }
-
-    public boolean[][] getShape() {
-        return shape;
-    }
     public ArrayList<Square> getBlocks(){
         return blocks;
     }
@@ -123,8 +124,6 @@ public class Tetromino {
             }
         }
     }
-
-    public Color getColor() { return color; }
 
     public static class ColorSerializer extends JsonSerializer<Color> {
         @Override
@@ -153,4 +152,10 @@ public class Tetromino {
             }
         }
     }
+
+    public boolean[][] getShape() {
+        return shape;
+    }
+
+    public Color getColor() { return color; }
 }

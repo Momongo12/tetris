@@ -15,6 +15,13 @@ import org.example.server.model.*;
 import java.io.IOException;
 import java.util.ArrayList;
 
+/**
+ * PvPGameSession class represents a game session for a player versus player (PvP) Tetris game.
+ * It manages the game state, players' sessions, tetrominos, and game logic.
+ *
+ * @version 1.0
+ * @author Denis Moskvin
+ */
 @Data
 public class PvPGameSession {
     private static final Logger log = LogManager.getLogger(PvPGameSession.class);
@@ -25,6 +32,12 @@ public class PvPGameSession {
     private boolean isHoldTetrominoPlayer1;
     private boolean isHoldTetrominoPlayer2;
 
+    /**
+     * Constructs a new PvPGameSession with the specified player sessions.
+     *
+     * @param player1Session The WebSocketSession for player 1.
+     * @param player2Session The WebSocketSession for player 2.
+     */
     public PvPGameSession(WebSocketSession player1Session, WebSocketSession player2Session) {
         this.player1Session = player1Session;
         this.player2Session = player2Session;
@@ -42,6 +55,12 @@ public class PvPGameSession {
         pvPGameModel.setNextTetrominoPlayer2(tetrominoFactory.getNextTetromino(player2Session));
     }
 
+    /**
+     * Initializes the game board by creating an ArrayList of Square arrays.
+     * Each Square represents a cell on the game board.
+     *
+     * @return The initialized game board represented as an ArrayList of Square arrays.
+     */
     private ArrayList<Square[]> initBoard() {
         ArrayList<Square[]> board = new ArrayList<>();
         for (int i = 0; i < ROWS; i++) {
@@ -55,6 +74,10 @@ public class PvPGameSession {
         return board;
     }
 
+    /**
+     * Starts the game by executing the game logic in separate threads for player 1 and player 2.
+     * The game continues until either player 1 or player 2 is game over.
+     */
     public void startGame() {
         log.info("game started");
         new Thread(() -> {
@@ -100,6 +123,11 @@ public class PvPGameSession {
         }).start();
     }
 
+    /**
+     * Destroys the player session data by setting the game matrix, hold tetromino, and next tetromino to null.
+     *
+     * @param playerSession The WebSocketSession of the player.
+     */
     private void destroyPlayerSessionData(WebSocketSession playerSession){
         if (playerSession.getId().equals(player1Session.getId())) {
             pvPGameModel.setGameMatrixPlayer1(null);
@@ -116,6 +144,17 @@ public class PvPGameSession {
 
     }
 
+    /**
+     * Moves the tetromino on the game board in the specified direction.
+     * If the tetromino touches the wall, it will not move.
+     * If the tetromino touches the ground, it will be put on the ground and the game state will be updated.
+     * Filled lines will be removed from the game board and the game state will be updated.
+     *
+     * @param tetromino      The tetromino to move.
+     * @param board          The game board.
+     * @param direction      The direction to move the tetromino (1 = right, 2 = down, 3 = left).
+     * @param playerSession  The WebSocketSession of the player.
+     */
     public void moveTetromino(Tetromino tetromino, ArrayList<Square[]> board, int direction, WebSocketSession playerSession) {
         if (tetrominoIsTouchWall(tetromino, board, direction)) {
             return;
@@ -135,12 +174,28 @@ public class PvPGameSession {
         log.debug("Tetromino moved");
     }
 
+    /**
+     * Rotates the tetromino on the game board.
+     * Sends the updated game session state to both players.
+     *
+     * @param tetromino The tetromino to rotate.
+     * @param board     The game board.
+     */
     public void rotateTetromino(Tetromino tetromino, ArrayList<Square[]> board) {
         tetromino.rotate(board, BOARD_COLOR);
         sendPlayersGameSessionState();
         log.debug("Tetromino rotated");
     }
 
+    /**
+     * Holds the current tetromino for the player.
+     * If the hold tetromino is available, swaps it with the current tetromino.
+     * If the hold tetromino is not available, sets the hold tetromino as the current tetromino
+     * and gets the next tetromino as the current tetromino.
+     * Sends the updated game session state to both players.
+     *
+     * @param sessionPlayer The WebSocketSession of the player.
+     */
     public void holdTetromino(WebSocketSession sessionPlayer) {
         System.out.println(sessionPlayer.getId());
         if (sessionPlayer.getId().equals(player1Session.getId())){
@@ -170,6 +225,14 @@ public class PvPGameSession {
         log.debug("Tetromino holded");
     }
 
+    /**
+     * Removes filled lines from the game board.
+     * Increases the score and lines cleared for the player.
+     * Sends the updated game session state to both players.
+     *
+     * @param board          The game board.
+     * @param playerSession  The WebSocketSession of the player.
+     */
     private void removeFilledLines(ArrayList<Square[]> board, WebSocketSession playerSession) {
         int countRemovedLines = 0;
         for (int i = 0; i < ROWS; i++) {
@@ -196,6 +259,14 @@ public class PvPGameSession {
         log.debug("filed line removed");
     }
 
+    /**
+     * Checks if the tetromino touches the wall in the specified direction.
+     *
+     * @param tetromino  The tetromino to check.
+     * @param board      The game board.
+     * @param direction  The direction to move the tetromino (1 = right, 3 = left).
+     * @return True if the tetromino touches the wall, False otherwise.
+     */
     private boolean tetrominoIsTouchWall(Tetromino tetromino, ArrayList<Square[]> board,int direction) {
         for (Square square : tetromino.getBlocks()) {
             int col = square.getCol();
@@ -210,6 +281,13 @@ public class PvPGameSession {
         return false;
     }
 
+    /**
+     * Checks if the tetromino touches the ground.
+     *
+     * @param tetromino  The tetromino to check.
+     * @param board      The game board.
+     * @return True if the tetromino touches the ground, False otherwise.
+     */
     private boolean tetrominoIsTouchedGround(Tetromino tetromino, ArrayList<Square[]> board) {
         for (Square square : tetromino.getBlocks()) {
             int col = square.getCol();
@@ -222,6 +300,12 @@ public class PvPGameSession {
         return false;
     }
 
+    /**
+     * Checks if the tetromino causes the game to be over.
+     *
+     * @param tetromino The tetromino to check.
+     * @return True if the tetromino causes the game to be over, False otherwise.
+     */
     private boolean isGameOver(Tetromino tetromino) {
         for (Square square : tetromino.getBlocks()) {
             if (square.getRow() == 0 && square.getCol() == 4) return true;
@@ -229,21 +313,41 @@ public class PvPGameSession {
         return false;
     }
 
+    /**
+     * Puts the tetromino on the ground by updating the game board.
+     *
+     * @param tetromino The tetromino to put on the ground.
+     * @param board     The game board.
+     */
     private void putTetrominoOnGround(Tetromino tetromino, ArrayList<Square[]> board) {
         for (Square square : tetromino.getBlocks()) {
             board.get(square.getRow())[square.getCol()].setColor(square.getColor());
         }
     }
 
+    /**
+     * Sends the game session state to both players.
+     */
     private void sendPlayersGameSessionState() {
         if (player1Session.isOpen()) {
             sendGameSessionState(player1Session);
+        }else if (!pvPGameModel.isGameOverPlayer1()){
+            pvPGameModel.setGameOverPlayer1(true);
+            destroyPlayerSessionData(player1Session);
         }
         if (player2Session.isOpen()) {
             sendGameSessionState(player2Session);
+        }else if (!pvPGameModel.isGameOverPlayer2()){
+            pvPGameModel.setGameOverPlayer2(true);
+            destroyPlayerSessionData(player2Session);
         }
     }
 
+    /**
+     * Sends the game session state to a specific player.
+     *
+     * @param playerSession The WebSocket session of the player.
+     */
     private void sendGameSessionState(WebSocketSession playerSession) {
         synchronized (playerSession) {
             try {
@@ -262,6 +366,12 @@ public class PvPGameSession {
         }
     }
 
+    /**
+     * Increases the score of the player session by the specified value.
+     *
+     * @param playerSession The WebSocket session of the player.
+     * @param value         The value to increase the score by.
+     */
     private void increaseScoreByPlayerSession(WebSocketSession playerSession, int value) {
         if ((playerSession == player1Session)) {
             pvPGameModel.setScorePlayer1(pvPGameModel.getScorePlayer1() + value);
@@ -270,6 +380,12 @@ public class PvPGameSession {
         }
     }
 
+    /**
+     * Increases the number of lines cleared by the player session by the specified value.
+     *
+     * @param playerSession The WebSocket session of the player.
+     * @param value         The value to increase the lines cleared by.
+     */
     private void increaseLinesClearedByPlayerSession(WebSocketSession playerSession, int value) {
         if ((playerSession == player1Session)) {
             pvPGameModel.setLinesClearedPlayer1(pvPGameModel.getLinesClearedPlayer1() + value);
@@ -278,6 +394,11 @@ public class PvPGameSession {
         }
     }
 
+    /**
+     * Updates the current tetromino and next tetromino for the player session.
+     *
+     * @param playerSession The WebSocket session of the player.
+     */
     private void updateTetrominoByPlayerSession(WebSocketSession playerSession) {
         if (playerSession == player1Session) {
             pvPGameModel.setTetrominoPlayer1(pvPGameModel.getNextTetrominoPlayer1());
@@ -288,6 +409,11 @@ public class PvPGameSession {
         }
     }
 
+    /**
+     * Updates the game over state for the player session.
+     *
+     * @param playerSession The WebSocket session of the player.
+     */
     private void updateGameOverStateByPlayerSession(WebSocketSession playerSession) {
         if (playerSession == player1Session) {
             pvPGameModel.setGameOverPlayer1(isGameOver(pvPGameModel.getTetrominoPlayer1()));

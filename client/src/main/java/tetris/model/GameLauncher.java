@@ -96,9 +96,24 @@ public class GameLauncher {
         LOGGER.info("Game started");
     }
 
+    public void restartGame(){
+        if (gameModel instanceof SoloGameModel) {
+            ((SoloGameModel) gameModel).refreshGameData();
+        }else {
+            if (isGameActive) {
+                webSocketClient.close();
+            }
+            isGameActive = false;
+            webSocketClient = null;
+            launcherView.displayLauncherHomepage();
+            connectToServer();
+            findPvPGameSession();
+        }
+    }
+
     public void connectToServer() {
         if (webSocketClient == null) {
-            System.out.println("попытка подключения к серверу");
+            LOGGER.info("Try connect to server");
             webSocketClient = new WebSocketClient(this);
             webSocketClient.connect("ws://localhost:8080/game");
         }

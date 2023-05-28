@@ -7,6 +7,10 @@ import lombok.Data;
 import java.util.ArrayList;
 import java.util.UUID;
 
+/**
+ * @version 1.0
+ * @author Denis Moskvin
+ */
 @Data
 public class PvPGameModel {
     private String sessionId;

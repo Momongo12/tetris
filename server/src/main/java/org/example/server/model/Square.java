@@ -15,6 +15,10 @@ import lombok.Data;
 import java.awt.*;
 import java.io.IOException;
 
+/**
+ * @version 1.0
+ * @author Denis Moskvin
+ */
 @Data
 public class Square {
     private int x;

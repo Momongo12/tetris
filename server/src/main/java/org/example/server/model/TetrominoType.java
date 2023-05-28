@@ -1,5 +1,9 @@
 package org.example.server.model;
 
+/**
+ * @version 1.0
+ * @author Denis Moskvin
+ */
 public enum TetrominoType {
     I(new boolean[][]{
             {true, true, true, true},

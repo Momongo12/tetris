@@ -65,8 +65,7 @@ public class MenuPause extends JPanel implements ActionListener {
         if (e.getSource() == resumeButton){
             gameLauncher.getLauncherView().resumeGame();
         }else if (e.getSource() == restartButton){
-            gameLauncher.getSoloGameModel().refreshGameData();
-            gameLauncher.getLauncherView().displayLauncherHomepage();
+            gameLauncher.restartGame();
         }
     }
 }

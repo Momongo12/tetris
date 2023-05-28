@@ -16,11 +16,21 @@ import java.io.IOException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+/**
+ * Implementation of the {@link PvPGameSessionHandler} interface.
+ * This handler is responsible for starting the game in a PvPGameSession.
+ *
+ * @version 1.0
+ * @author Denis Moskvin
+ */
 public class StartGameHandler implements PvPGameSessionHandler {
     private static final Logger log = LogManager.getLogger(PvPGameSession.class);
     public StartGameHandler() {
     }
 
+    /**
+     * Handles the "startGame" event by starting the game in the PvPGameSession.
+     */
     @Override
     public void handle(WebSocketSession playerSession, PvPGameSessionMatcher pvPGameSessionMatcher, JsonNode jsonNode) {
         String sessionId = jsonNode.get("sessionId").asText();

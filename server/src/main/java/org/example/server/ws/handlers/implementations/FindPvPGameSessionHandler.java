@@ -1,6 +1,5 @@
 package org.example.server.ws.handlers.implementations;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
@@ -14,11 +13,21 @@ import org.springframework.web.socket.WebSocketSession;
 
 import java.io.IOException;
 
+/**
+ * Implementation of the {@link PvPGameSessionHandler} interface.
+ * This handler is responsible for creating a PvPGameSession and sending the necessary messages to the players involved.
+ *
+ * @version 1.0
+ * @author Denis Moskvin
+ */
 public class FindPvPGameSessionHandler implements PvPGameSessionHandler {
     private static final Logger log = LogManager.getLogger(PvPGameSession.class);
     public FindPvPGameSessionHandler() {
     }
 
+    /**
+     * Handles the "findPvPGameSession" event by creating a PvPGameSession and sending necessary messages to the players.
+     */
     @Override
     public void handle(WebSocketSession playerSession, PvPGameSessionMatcher pvPGameSessionMatcher, JsonNode jsonNode) {
         PvPGameSession pvPGameSession =  pvPGameSessionMatcher.createPvPGameSession(playerSession);

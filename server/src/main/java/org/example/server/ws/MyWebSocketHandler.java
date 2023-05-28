@@ -1,10 +1,8 @@
 package org.example.server.ws;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.node.ObjectNode;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.example.server.model.PvPGameModel;
 import org.example.server.service.PvPGameSession;
 import org.example.server.service.PvPGameSessionMatcher;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -14,10 +12,11 @@ import org.springframework.web.socket.*;
 import org.springframework.web.socket.handler.TextWebSocketHandler;
 
 import java.util.Map;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
-
+/**
+ * @version 1.0
+ * @author Denis Moskvin
+ */
 public class MyWebSocketHandler extends TextWebSocketHandler {
     private static final Logger log = LogManager.getLogger(PvPGameSession.class);
     private final PvPGameSessionMatcher pvPGameSessionMatcher;
@@ -66,6 +65,6 @@ public class MyWebSocketHandler extends TextWebSocketHandler {
 
     @Override
     public void afterConnectionClosed(WebSocketSession session, CloseStatus status) throws Exception {
-        // Код, выполняемый после закрытия соединения с клиентом
+        pvPGameSessionMatcher.removeWaitingPlayerSession(session);
     }
 }
