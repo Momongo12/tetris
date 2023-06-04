@@ -1,9 +1,7 @@
 package org.example.server.ws;
 
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-import org.example.server.service.PvPGameSession;
+import lombok.extern.log4j.Log4j2;
 import org.example.server.service.PvPGameSessionMatcher;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -17,8 +15,8 @@ import java.util.Map;
  * @version 1.0
  * @author Denis Moskvin
  */
+@Log4j2
 public class MyWebSocketHandler extends TextWebSocketHandler {
-    private static final Logger log = LogManager.getLogger(PvPGameSession.class);
     private final PvPGameSessionMatcher pvPGameSessionMatcher;
     private Map<String, PvPGameSessionHandler> messageHandlers;
 
@@ -26,6 +24,7 @@ public class MyWebSocketHandler extends TextWebSocketHandler {
         this.pvPGameSessionMatcher = pvPGameSessionMatcher;
         try {
             messageHandlers = PvPGameSessionHandler.getMessageHandlersMap();
+            System.out.println(messageHandlers);
         }catch (Exception e) {
             log.error(e.getLocalizedMessage());
         }
@@ -37,7 +36,7 @@ public class MyWebSocketHandler extends TextWebSocketHandler {
         pvPGameSessionMatcher.addWaitingPlayerSession(session);
 
         // Код, который выполняется при установке соединения с клиентом
-        System.out.println("Player connected. Session ID: " + session.getId());
+        log.info("Player connected. Session ID: " + session.getId());
     }
 
     @Override

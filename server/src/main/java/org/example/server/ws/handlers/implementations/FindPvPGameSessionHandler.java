@@ -3,6 +3,7 @@ package org.example.server.ws.handlers.implementations;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import lombok.extern.log4j.Log4j2;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.example.server.service.PvPGameSession;
@@ -20,8 +21,8 @@ import java.io.IOException;
  * @version 1.0
  * @author Denis Moskvin
  */
+@Log4j2
 public class FindPvPGameSessionHandler implements PvPGameSessionHandler {
-    private static final Logger log = LogManager.getLogger(PvPGameSession.class);
     public FindPvPGameSessionHandler() {
     }
 
@@ -51,7 +52,7 @@ public class FindPvPGameSessionHandler implements PvPGameSessionHandler {
                 log.error(e.getLocalizedMessage());
             }
         }else {
-            log.warn("pvPGameSession finding error");
+            log.warn("pvPGameSession not found");
         }
     }
 }

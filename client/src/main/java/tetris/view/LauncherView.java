@@ -1,8 +1,11 @@
 package tetris.view;
 
+import lombok.extern.log4j.Log4j2;
 import tetris.controller.LauncherController;
 import tetris.model.GameLauncher;
 import tetris.model.GameModel;
+import tetris.view.registration.EventLogin;
+import tetris.view.registration.LoginAndRegister;
 
 import static tetris.resource.ResourceManager.*;
 
@@ -10,6 +13,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 
+@Log4j2
 public class LauncherView extends JFrame {
     private JPanel barPanel;
     private JPanel barPanelButton;
@@ -30,6 +34,7 @@ public class LauncherView extends JFrame {
     public GameLauncher gameLauncher;
     private LauncherController launcherController;
     private RegistrationPanel registrationPanel;
+    private LoginAndRegister loginAndRegisterPanel;
     private UserProfilePanel userProfilePanel;
 
     private ChooseGameModePanel chooseGameModePanel;
@@ -100,8 +105,10 @@ public class LauncherView extends JFrame {
         iconLabel.setForeground(Color.WHITE);
         iconLabel.setBackground(null);
         iconLabel.setOpaque(false);
+        iconLabel.setVerticalAlignment(JLabel.CENTER);
+        iconLabel.setVerticalTextPosition(JLabel.CENTER);
+        iconLabel.setBorder(BorderFactory.createEmptyBorder(0, 10, 0, 0));
 
-//        JLabel esp = new JLabel("            ", 2);
 
         barPanel.setLayout(new BorderLayout());
         barPanel.add(barPanelButton, BorderLayout.LINE_END);
@@ -134,10 +141,23 @@ public class LauncherView extends JFrame {
         tabbedPane.setFocusable(true);
         tabbedPane.validate();
 
-        inter.add(registrationPanel);
         inter.setBackground(new Color(18, 33, 43));// 54, 63, 73
         inter.setFocusable(true);
         inter.validate();
+
+        try {
+            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
+                if ("Nimbus".equals(info.getName())) {
+                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
+                    break;
+                }
+            }
+        } catch (ClassNotFoundException | IllegalAccessException | InstantiationException |
+                 UnsupportedLookAndFeelException ex) {
+            log.error(ex);
+        }
+
+        initRegistrationPanel();
 
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setPreferredSize(new Dimension(1120, 700));
@@ -151,7 +171,7 @@ public class LauncherView extends JFrame {
         add(inter, BorderLayout.CENTER);
         setFocusable(true);
         validate();
-        setVisible(false);
+        setVisible(true);
 
     }
 
@@ -207,7 +227,7 @@ public class LauncherView extends JFrame {
     }
 
     public void displayLauncherHomepage(){
-        userProfilePanel.updateProfilePanel(); //обновляем UI здесь, т.к при вызове этой фунции user в лаунчере всегда инициализироване или обновлен
+//        userProfilePanel.updateProfilePanel(); //обновляем UI здесь, т.к при вызове этой фунции user в лаунчере всегда инициализироване или обновлен
         displayChooseGameModePanel();
     }
 
@@ -226,4 +246,26 @@ public class LauncherView extends JFrame {
         repaint();
         revalidate();
     }
+
+    private void initRegistrationPanel(){
+        loginAndRegisterPanel = new LoginAndRegister(gameLauncher);
+
+        inter.add(loginAndRegisterPanel, BorderLayout.CENTER);
+        EventLogin event = new EventLogin() {
+            @Override
+            public void loginDone() {
+                displayLauncherHomepage();
+            }
+
+            @Override
+            public void logOut() {
+                inter.removeAll();
+                inter.add(loginAndRegisterPanel);
+                inter.revalidate();
+                inter.repaint();
+            }
+        };
+        loginAndRegisterPanel.setEventLogin(event);
+    }
+
 }

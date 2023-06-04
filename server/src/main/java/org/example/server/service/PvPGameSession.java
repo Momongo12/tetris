@@ -4,6 +4,7 @@ package org.example.server.service;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import lombok.Data;
+import lombok.extern.log4j.Log4j2;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.example.server.util.TetrisConstants;
@@ -23,8 +24,8 @@ import java.util.ArrayList;
  * @author Denis Moskvin
  */
 @Data
+@Log4j2
 public class PvPGameSession {
-    private static final Logger log = LogManager.getLogger(PvPGameSession.class);
     private final PvPGameModel pvPGameModel;
     private final WebSocketSession player1Session;
     private final WebSocketSession player2Session;

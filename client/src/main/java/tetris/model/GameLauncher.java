@@ -12,6 +12,7 @@ import tetris.dataAccessLayer.HighScoreDataAccessObject;
 import tetris.dataAccessLayer.PlayerStatisticsTableDataAccessObject;
 import tetris.logger.MyLoggerFactory;
 import tetris.resource.ResourceManager;
+import tetris.service.impl.AuthServiceImpl;
 import tetris.view.GamePanel;
 import tetris.view.LauncherPreview;
 import tetris.view.LauncherView;
@@ -45,10 +46,11 @@ public class GameLauncher {
         gameModel = new SoloGameModel(this);
         tetrominoController = new TetrominoController(gameModel);
 
-        new LauncherPreview(this);
-        launcherController = new LauncherController(this);
+        launcherController = new LauncherController(this, new AuthServiceImpl());
         launcherView = new LauncherView(this, launcherController);
         launcherView.addKeyListener(tetrominoController);
+
+//        new LauncherPreview(this);
 
         initBackgroundSounds();
         LOGGER.info("Launcher started");

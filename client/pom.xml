@@ -56,7 +56,16 @@
         <version>1.18.26</version>
         <scope>provided</scope>
         </dependency>
-
+        <dependency>
+            <groupId>net.java.dev.timingframework</groupId>
+            <artifactId>timingframework</artifactId>
+            <version>1.0</version>
+        </dependency>
+        <dependency>
+            <groupId>com.miglayout</groupId>
+            <artifactId>miglayout-swing</artifactId>
+            <version>11.1</version>
+        </dependency>
     </dependencies>
 
 </project>
