@@ -1,24 +1,39 @@
--- Создание таблицы "users"
-CREATE TABLE users (
-   user_id SERIAL PRIMARY KEY,
+-- Создание таблицы "players"
+CREATE TABLE players (
+   player_id SERIAL PRIMARY KEY,
    name VARCHAR(255) NOT NULL,
    username VARCHAR(255) NOT NULL,
    email VARCHAR(255) NOT NULL,
-   password VARCHAR(255) NOT NULL
+   password VARCHAR(255) NOT NULL,
+   date_of_registration DATE
 );
 
--- Создание индекса на столбец "email" в таблице "users"
-CREATE INDEX idx_users_email ON users(email);
+CREATE INDEX idx_users_email ON players(email);
 
--- Создание таблицы "high_scores" с внешним ключом на таблицу "users"
+-- Создание таблицы "high_scores" с внешним ключом на таблицу "players"
 CREATE TABLE high_scores (
      high_score_id SERIAL PRIMARY KEY,
-     score INT NOT NULL,
-     level INT NOT NULL,
-     lines INT NOT NULL,
-     user_id INT NOT NULL,
-     FOREIGN KEY (user_id) REFERENCES users(user_id)
+     max_score INT NOT NULL,
+     max_level INT NOT NULL,
+     max_lines INT NOT NULL,
+     player_id INT NOT NULL,
+     FOREIGN KEY (player_id) REFERENCES players(player_id)
 );
+
+CREATE INDEX idx_high_scores_user_id ON high_scores(player_id);
+
+CREATE TABLE player_statistic (
+    player_statistic_id SERIAL PRIMARY KEY,
+    player_id INT NOT NULL,
+    max_score INT NOT NULL DEFAULT 0,
+    max_level INT NOT NULL DEFAULT 0,
+    max_lines INT NOT NULL DEFAULT 0,
+    average_score INT NOT NULL DEFAULT 0,
+    number_of_games INT NOT NULL DEFAULT 0,
+    FOREIGN KEY (player_id) REFERENCES players(player_id)
+);
+
+CREATE INDEX idx_player_statistic_user_id ON player_statistic(player_id);
 
 -- Создание триггера для таблицы "high_scores"
 CREATE OR REPLACE FUNCTION keep_top_scores()
@@ -29,7 +44,7 @@ BEGIN
         DELETE FROM high_scores
         WHERE high_score_id NOT IN (
             SELECT high_score_id FROM high_scores
-            ORDER BY score DESC
+            ORDER BY max_score DESC
             LIMIT 30
         );
     END IF;

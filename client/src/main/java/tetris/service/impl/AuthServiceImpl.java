@@ -1,28 +1,26 @@
 package tetris.service.impl;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+
 import lombok.extern.log4j.Log4j2;
 import tetris.model.dto.LoginRequestDto;
 import tetris.model.dto.RegistrationRequestDto;
 import tetris.service.AuthService;
+import static tetris.util.ServiceUtil.*;
 
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.net.HttpURLConnection;
-import java.net.URL;
 
 @Log4j2
 public class AuthServiceImpl implements AuthService {
 
-    private static final String AUTHORIZATION_SERVER_BASE_URL = "http://localhost:8080/api/auth";
+    private static final String AUTHORIZATION_SERVER_BASE_URL = "http://localhost:8082/api/auth";
 
     public boolean authenticate(LoginRequestDto loginRequestDto) {
         HttpURLConnection connection = null;
         try {
             String loginUrl = AUTHORIZATION_SERVER_BASE_URL + "/login";
 
-            connection = createConnection(loginUrl);
+            connection = createConnection(loginUrl, "POST");
 
             sendRequest(connection, loginRequestDto);
 
@@ -50,7 +48,7 @@ public class AuthServiceImpl implements AuthService {
         try {
             String loginUrl = AUTHORIZATION_SERVER_BASE_URL + "/register";
 
-            connection = createConnection(loginUrl);
+            connection = createConnection(loginUrl, "POST");
 
             sendRequest(connection, registrationRequestDto);
 
@@ -71,33 +69,5 @@ public class AuthServiceImpl implements AuthService {
             }
         }
         return false;
-    }
-
-    private static HttpURLConnection createConnection(String urlString) throws IOException {
-        URL url = new URL(urlString);
-        HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-        connection.setRequestMethod("POST");
-        connection.setRequestProperty("Content-Type", "application/json");
-        connection.setDoOutput(true);
-        return connection;
-    }
-
-    private static void sendRequest(HttpURLConnection connection, Object request) throws IOException {
-        ObjectMapper objectMapper = new ObjectMapper();
-        String requestBody = objectMapper.writeValueAsString(request);
-
-        OutputStream outputStream = connection.getOutputStream();
-        outputStream.write(requestBody.getBytes());
-        outputStream.flush();
-    }
-
-    private static String readResponse(InputStream inputStream) throws IOException {
-        StringBuilder responseBuilder = new StringBuilder();
-        byte[] buffer = new byte[1024];
-        int bytesRead;
-        while ((bytesRead = inputStream.read(buffer)) != -1) {
-            responseBuilder.append(new String(buffer, 0, bytesRead));
-        }
-        return responseBuilder.toString();
     }
 }

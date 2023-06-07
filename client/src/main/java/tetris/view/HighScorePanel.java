@@ -3,6 +3,7 @@ package tetris.view;
 import tetris.dataAccessLayer.HighScoreDataAccessObject;
 import tetris.dataAccessLayer.HighScoreTableModel;
 import tetris.model.HighScore;
+
 import static tetris.resource.ResourceManager.*;
 
 import javax.swing.*;
@@ -34,7 +35,7 @@ public class HighScorePanel extends JPanel {
         panelOffset.setSize(getPreferredSize());
         panelOffset.setLayout(new BorderLayout());
 
-        JButton updateTableButton= new JButton("Update High Score");
+        JButton updateTableButton = new JButton("Update High Score");
         updateTableButton.setFont(new Font("Showcard Gothic", Font.PLAIN, 19));
         updateTableButton.setIcon(getImg("refresh.png", 30, 30));
         updateTableButton.setForeground(Color.WHITE);
@@ -48,7 +49,7 @@ public class HighScorePanel extends JPanel {
                     HighScore highScore = HighScoreDataAccessObject.getHighScoreDataFromDB();
                     tableModel.updateHighScoreData(highScore);
                     table.updateUI();
-                } catch (Exception err){
+                } catch (Exception err) {
                     System.out.println(err.getMessage());
                 }
             }
@@ -78,7 +79,7 @@ public class HighScorePanel extends JPanel {
         add(panelOffset2);
     }
 
-    private JPanel createHighScoreTableName(){
+    private JPanel createHighScoreTableName() {
         JLabel HighScoreTableName = new JLabel("High Scores");
         HighScoreTableName.setBackground(new Color(0, 0, 0, 0));
         HighScoreTableName.setOpaque(false);
@@ -89,16 +90,16 @@ public class HighScorePanel extends JPanel {
         HighScoreTableNameBox.setPreferredSize(new Dimension(getWidth(), 80));
         HighScoreTableNameBox.setBackground(new Color(0, 0, 0, 0));
         HighScoreTableNameBox.setOpaque(false);
-        HighScoreTableNameBox.add( HighScoreTableName, BorderLayout.CENTER);
+        HighScoreTableNameBox.add(HighScoreTableName, BorderLayout.CENTER);
 
         return HighScoreTableNameBox;
     }
 
-    private JTable createTable(){
+    private JTable createTable() {
         HighScore highScore = new HighScore(new ArrayList<>());
         try {
             highScore = HighScoreDataAccessObject.getHighScoreDataFromDB();
-        } catch (Exception e){
+        } catch (Exception e) {
             System.err.println(e.getMessage());
         }
 
@@ -129,10 +130,10 @@ public class HighScorePanel extends JPanel {
 
         for (int i = 0; i < columnCount; i++) {
             TableColumn column = columnModel.getColumn(i);
-            column.setCellRenderer(new DefaultTableCellRenderer(){
+            column.setCellRenderer(new DefaultTableCellRenderer() {
                 public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus,
-                                                               int row, int column){
-                    JLabel component = (JLabel)super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+                                                               int row, int column) {
+                    JLabel component = (JLabel) super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
                     component.setOpaque(false);
                     component.setBackground(new Color(26, 26, 32));
                     component.setForeground(Color.WHITE);
@@ -145,7 +146,7 @@ public class HighScorePanel extends JPanel {
         return table;
     }
 
-    private JScrollPane createTableScrollPane(){
+    private JScrollPane createTableScrollPane() {
         JTable table = createTable();
 
         JScrollPane scrollPane = new JScrollPane(table);

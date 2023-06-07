@@ -1,8 +1,9 @@
-package org.example.authorization.model.entity;
+package org.example.playerservice.model.entity;
 
 import lombok.Data;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.relational.core.mapping.Column;
+import org.springframework.data.relational.core.mapping.MappedCollection;
 import org.springframework.data.relational.core.mapping.Table;
 
 import java.sql.Date;
@@ -10,7 +11,6 @@ import java.sql.Date;
 @Data
 @Table("players")
 public class Player {
-
     @Id
     @Column("player_id")
     private Long playerId;
@@ -29,6 +29,9 @@ public class Player {
 
     @Column("date_of_registration")
     private Date dateOfRegistration;
+
+    @MappedCollection(idColumn = "player_id")
+    private PlayerStatistic playerStatistic;
 
     public Player(String name, String username, String email, String password, Date dateOfRegistration) {
         this.name = name;

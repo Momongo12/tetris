@@ -13,8 +13,8 @@ import tetris.dataAccessLayer.PlayerStatisticsTableDataAccessObject;
 import tetris.logger.MyLoggerFactory;
 import tetris.resource.ResourceManager;
 import tetris.service.impl.AuthServiceImpl;
+import tetris.service.impl.PlayerStatsServiceImpl;
 import tetris.view.GamePanel;
-import tetris.view.LauncherPreview;
 import tetris.view.LauncherView;
 import tetris.view.NavigationPanel;
 
@@ -46,7 +46,7 @@ public class GameLauncher {
         gameModel = new SoloGameModel(this);
         tetrominoController = new TetrominoController(gameModel);
 
-        launcherController = new LauncherController(this, new AuthServiceImpl());
+        launcherController = new LauncherController(this, new AuthServiceImpl(), new PlayerStatsServiceImpl());
         launcherView = new LauncherView(this, launcherController);
         launcherView.addKeyListener(tetrominoController);
 
@@ -234,6 +234,10 @@ public class GameLauncher {
         LOGGER.info("Player log in");
     }
 
+    public void setCurrentPlayer(Player player) {
+        currentPlayer = player;
+    }
+
     public void updateStatisticPlayer(int currentScore, int currentLines, int currentLevel){
         currentPlayer.updateStatisticPlayer(currentScore, currentLines, currentLevel);
         PlayerStatisticsTableDataAccessObject.updatePlayerStatisticsInDB(currentPlayer);
@@ -254,7 +258,7 @@ public class GameLauncher {
         return launcherView;
     }
 
-    public Player getcurrentPlayer() {
+    public Player getCurrentPlayer() {
         return currentPlayer;
     }
 }

@@ -5,14 +5,17 @@ import tetris.model.GameLauncher;
 import tetris.model.dto.LoginRequestDto;
 import tetris.model.dto.RegistrationRequestDto;
 import tetris.service.AuthService;
+import tetris.service.PlayerStatsService;
 
 @Log4j2
 public class LauncherController {
-    private GameLauncher gameLauncher;
-    private AuthService authService;
-    public LauncherController(GameLauncher gameLauncher, AuthService authService) {
+    private final GameLauncher gameLauncher;
+    private final AuthService authService;
+    private final PlayerStatsService playerStatsService;
+    public LauncherController(GameLauncher gameLauncher, AuthService authService, PlayerStatsService playerStatsService) {
         this.authService = authService;
         this.gameLauncher = gameLauncher;
+        this.playerStatsService = playerStatsService;
     }
 
     public void handlePvpGameButtonClick() {
@@ -26,13 +29,17 @@ public class LauncherController {
 
     public void handleLogInButtonClick(LoginRequestDto loginRequestDto) {
         log.info("Player login attempt");
-        authService.authenticate(loginRequestDto);
-        gameLauncher.getLauncherView().displayLauncherHomepage();
+        if (authService.authenticate(loginRequestDto)) {
+            gameLauncher.setCurrentPlayer(playerStatsService.getPlayerByEmail(loginRequestDto.getEmail()));
+            gameLauncher.getLauncherView().displayLauncherHomepage();
+        }
     }
 
     public void handleRegistrationButtonClick(RegistrationRequestDto registrationRequestDto) {
         log.info("Player registration attempt");
-        authService.registerPlayer(registrationRequestDto);
-        gameLauncher.getLauncherView().displayLauncherHomepage();
+        if (authService.registerPlayer(registrationRequestDto)) {
+            gameLauncher.setCurrentPlayer(playerStatsService.getPlayerByEmail(registrationRequestDto.getEmail()));
+            gameLauncher.getLauncherView().displayLauncherHomepage();
+        }
     }
 }

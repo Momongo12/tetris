@@ -1,5 +1,7 @@
 package tetris.model;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.Data;
 
 import java.util.Date;
@@ -7,14 +9,18 @@ import java.util.LinkedHashMap;
 
 @Data
 public class Player {
-    private final int playerIdInDB;
-    private final String name;
+    private int playerIdInDB;
+    private String name;
     private Date dateOfRegistation;
     private int numberOfGames;
     private int maxScore;
     private int averageScore;
     private int maxLines;
     private int maxLevel;
+
+    public Player() {
+
+    }
 
     public Player(String name, int playerIdInDB){
         this.playerIdInDB = playerIdInDB;
@@ -39,5 +45,15 @@ public class Player {
         maxLines = Math.max(currentLines, maxLines);
         numberOfGames++;
         averageScore = (averageScore + currentScore) / numberOfGames;
+    }
+
+    public String serialize() throws JsonProcessingException {
+        ObjectMapper objectMapper = new ObjectMapper();
+        return objectMapper.writeValueAsString(this);
+    }
+
+    public static Player deserialize(String json) throws JsonProcessingException {
+        ObjectMapper objectMapper = new ObjectMapper();
+        return objectMapper.readValue(json, Player.class);
     }
 }

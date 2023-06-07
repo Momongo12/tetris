@@ -6,8 +6,9 @@ import org.example.authorization.service.AuthService;
 import org.example.authorization.util.PasswordUtils;
 import org.springframework.stereotype.Service;
 
+import java.util.Calendar;
+import java.sql.Date;
 import java.util.Optional;
-import java.util.UUID;
 
 /**
  * The AuthServiceImpl class implements the {@link  AuthService} interface.
@@ -47,9 +48,8 @@ public class AuthServiceImpl implements AuthService {
         if (playerOptional.isPresent()) {
             return false;
         }else {
-            System.out.println(name + " " + username + " " + email + " " + password);
-            System.out.println(PasswordUtils.encryptPassword(password));
-            Player player = new Player(name.trim(), username.trim(), email.trim(), PasswordUtils.encryptPassword(password.trim()));
+            Calendar cal= Calendar.getInstance();
+            Player player = new Player(name.trim(), username.trim(), email.trim(), PasswordUtils.encryptPassword(password.trim()), new Date(cal.getTimeInMillis()));
             playerRepository.save(player);
             return true;
         }

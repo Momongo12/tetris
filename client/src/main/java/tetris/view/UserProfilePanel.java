@@ -32,7 +32,7 @@ public class UserProfilePanel extends JPanel{
 
     public void updateProfilePanel(){
         if (player == null) {
-            player = gameLauncher.getcurrentPlayer();
+            player = gameLauncher.getCurrentPlayer();
             createUI();
         }else {
             statisticPanel.removeAll();
@@ -47,7 +47,7 @@ public class UserProfilePanel extends JPanel{
     }
 
     public void createUI(){
-        player = gameLauncher.getcurrentPlayer();
+        player = gameLauncher.getCurrentPlayer();
         JLabel usernameLabel = createUserInfoLabel("   " + player.getName(), 30);
         JLabel userDataOfRegistation = createUserInfoLabel("   Date of registration:  " + player.getDateOfRegistation().toString(), 18);
         AvatarPanel avatarPanel = new AvatarPanel();
