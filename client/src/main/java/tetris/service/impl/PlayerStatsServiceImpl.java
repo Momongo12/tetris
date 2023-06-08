@@ -24,6 +24,7 @@ public class PlayerStatsServiceImpl implements PlayerStatsService {
             int responseCode = connection.getResponseCode();
 
             if (responseCode == HttpURLConnection.HTTP_OK) {
+                log.info("get player statistic successful");
                 return Player.deserialize(readResponse(connection.getInputStream()));
             } else {
                 log.error("Get player Statistics failed\nstatus:" + responseCode);
@@ -37,5 +38,30 @@ public class PlayerStatsServiceImpl implements PlayerStatsService {
             }
         }
         return null;
+    }
+
+    public void updateStatisticPlayer(Player player) {
+        HttpURLConnection connection = null;
+        try {
+            String url = PLAYER_STATISTIC_SERVER_BASE_URL + "player/" + player.getPlayerIdInDB();
+
+            connection = createConnection(url, "POST");
+
+            sendRequest(connection, player);
+            int responseCode = connection.getResponseCode();
+
+            if (responseCode == HttpURLConnection.HTTP_OK) {
+                log.info("Player statistic updated");
+            } else {
+                log.error("Player status update failed\nstatus:" + responseCode);
+            }
+
+        } catch (IOException e) {
+            log.error("Player status update error", e);
+        }finally {
+            if (connection != null) {
+                connection.disconnect();
+            }
+        }
     }
 }

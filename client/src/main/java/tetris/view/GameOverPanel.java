@@ -88,9 +88,12 @@ public class GameOverPanel extends JPanel implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        if (e.getSource() == toHomeButton){
-            gameLauncher.getLauncherView().displayLauncherHomepage();
+        if (e.getSource() == restartButton){
+            gameLauncher.restartGame();
+        }else if (e.getSource() == toHomeButton) {
+            gameLauncher.setGameActive(false);
+            gameLauncher.destroyWebSocketClient();
         }
-        gameLauncher.restartGame();
+        gameLauncher.getLauncherView().displayLauncherHomepage();
     }
 }

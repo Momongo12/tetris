@@ -8,10 +8,11 @@ import org.apache.logging.log4j.Logger;
 import tetris.controller.LauncherController;
 import tetris.controller.TetrominoController;
 import tetris.controller.WebSocketClient;
-import tetris.dataAccessLayer.HighScoreDataAccessObject;
 import tetris.dataAccessLayer.PlayerStatisticsTableDataAccessObject;
 import tetris.logger.MyLoggerFactory;
 import tetris.resource.ResourceManager;
+import tetris.service.AuthService;
+import tetris.service.PlayerStatsService;
 import tetris.service.impl.AuthServiceImpl;
 import tetris.service.impl.PlayerStatsServiceImpl;
 import tetris.view.GamePanel;
@@ -31,7 +32,8 @@ public class GameLauncher {
     private WebSocketClient webSocketClient;
     private Player currentPlayer;
     private GamePanel gamePanel;
-
+    private PlayerStatsService playerStatsService;
+    private AuthService authService;
     private boolean isGameActive = false;
     private SwingWorker<Void, Void> worker;
 
@@ -46,7 +48,9 @@ public class GameLauncher {
         gameModel = new SoloGameModel(this);
         tetrominoController = new TetrominoController(gameModel);
 
-        launcherController = new LauncherController(this, new AuthServiceImpl(), new PlayerStatsServiceImpl());
+        initServices();
+
+        launcherController = new LauncherController(this, authService, playerStatsService);
         launcherView = new LauncherView(this, launcherController);
         launcherView.addKeyListener(tetrominoController);
 
@@ -54,6 +58,11 @@ public class GameLauncher {
 
         initBackgroundSounds();
         LOGGER.info("Launcher started");
+    }
+
+    private void initServices() {
+        this.authService = new AuthServiceImpl();
+        this.playerStatsService = new PlayerStatsServiceImpl();
     }
 
     private void initBackgroundSounds(){
@@ -79,7 +88,8 @@ public class GameLauncher {
     }
 
     public void startGame(){
-        if (webSocketClient != null &&!isGameActive) {
+        if (webSocketClient != null && !isGameActive) {
+            isGameActive = true;
             doRequestToStartGame();
             return;
         }
@@ -87,14 +97,15 @@ public class GameLauncher {
             arrayOfSounds[soundIndex].start();
             backgroundMusicIsDisable = false;
         }
-        worker = new SwingWorker<>() {
-            @Override
-            protected Void doInBackground(){
-                gameModel.startGame();
-                return null;
-            }
-        };
-        worker.execute();
+//        worker = new SwingWorker<>() {
+//            @Override
+//            protected Void doInBackground(){
+//                gameModel.startGame();
+//                return null;
+//            }
+//        };
+//        worker.execute();
+        gameModel.startGame();
         LOGGER.info("Game started");
     }
 
@@ -107,7 +118,6 @@ public class GameLauncher {
             }
             isGameActive = false;
             webSocketClient = null;
-            launcherView.displayLauncherHomepage();
             connectToServer();
             findPvPGameSession();
         }
@@ -117,7 +127,7 @@ public class GameLauncher {
         if (webSocketClient == null) {
             LOGGER.info("Try connect to server");
             webSocketClient = new WebSocketClient(this);
-            webSocketClient.connect("ws://localhost:8080/game");
+            webSocketClient.connect("ws://localhost:8083/game");
         }
     }
 
@@ -240,8 +250,8 @@ public class GameLauncher {
 
     public void updateStatisticPlayer(int currentScore, int currentLines, int currentLevel){
         currentPlayer.updateStatisticPlayer(currentScore, currentLines, currentLevel);
-        PlayerStatisticsTableDataAccessObject.updatePlayerStatisticsInDB(currentPlayer);
-        HighScoreDataAccessObject.addHighScoreDataToDB(currentPlayer);
+        playerStatsService.updateStatisticPlayer(currentPlayer);
+//        HighScoreDataAccessObject.addHighScoreDataToDB(currentPlayer);
     }
 
     public void setNavigationPanel(NavigationPanel navigationPanel){

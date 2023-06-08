@@ -5,4 +5,5 @@ import tetris.model.Player;
 public interface PlayerStatsService {
 
     Player getPlayerByEmail(String email);
+    void updateStatisticPlayer(Player player);
 }

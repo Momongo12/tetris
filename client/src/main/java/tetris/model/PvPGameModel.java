@@ -16,6 +16,7 @@ import javax.sound.sampled.LineListener;
 import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import static tetris.util.TetrisConstants.*;
 
@@ -103,6 +104,37 @@ public class PvPGameModel implements GameModel {
                 return null;
             }
         };
+
+//        Thread thread1 = new Thread(() -> {
+//            System.out.println("start 1");
+//            while (!pvPGameSession.isGameOverPlayer1()) {
+//                try {
+//                    Thread.sleep(pvPGameSession.getGameSpeed() / 2);
+//                } catch (Exception e) {
+//                    e.printStackTrace();
+//                }
+//                gamePanel.repaint();
+//            }
+//            endGame(pvPGameSession.getPlayer1SessionId());
+//            System.out.println("end 1");
+//        });
+//        thread1.start();
+//
+//        Thread thread2 = new Thread(() -> {
+//            System.out.println("start 2");
+//            while (!pvPGameSession.isGameOverPlayer2()) {
+//                try {
+//                    Thread.sleep(pvPGameSession.getGameSpeed() / 2);
+//                } catch (Exception e) {
+//                    e.printStackTrace();
+//                }
+//                gamePanel.repaint();
+//            }
+//            System.out.println("end 2");
+//            endGame(pvPGameSession.getPlayer2SessionId());
+//        });
+//        thread2.start();
+
 
         worker2 = new SwingWorker<>() {
             @Override

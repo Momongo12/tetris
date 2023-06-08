@@ -24,7 +24,6 @@ public class MyWebSocketHandler extends TextWebSocketHandler {
         this.pvPGameSessionMatcher = pvPGameSessionMatcher;
         try {
             messageHandlers = PvPGameSessionHandler.getMessageHandlersMap();
-            System.out.println(messageHandlers);
         }catch (Exception e) {
             log.error(e.getLocalizedMessage());
         }
@@ -35,7 +34,6 @@ public class MyWebSocketHandler extends TextWebSocketHandler {
         // Добавляем подключенного игрока в список подключенных игроков
         pvPGameSessionMatcher.addWaitingPlayerSession(session);
 
-        // Код, который выполняется при установке соединения с клиентом
         log.info("Player connected. Session ID: " + session.getId());
     }
 

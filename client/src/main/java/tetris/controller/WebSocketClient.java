@@ -51,11 +51,20 @@ public class WebSocketClient implements MessageHandler.Whole<String>{
             gameLauncher.displayPvPGameField(pvPGameSession);
             gameLauncher.updatePvPGameSession(pvPGameSession);
         }else if (eventType.equals("gameStarted")){
-            System.out.println("gameStarted");
             PvPGameSession pvPGameSession = PvPGameSession.deserialize(jsonNode.get("pvPGameModel").asText());
             gameLauncher.updatePvPGameSession(pvPGameSession);
-            gameLauncher.setGameActive(true);
-            gameLauncher.startGame();
+
+            /*
+            If the game is active false, then we have not pressed play,
+            so we need to update the game status icon and so we press play,
+            and if true, then we have already pressed this button and we just need to run the game loop
+             */
+            if (gameLauncher.isGameActive()) {
+                gameLauncher.startGame();
+            }else {
+                gameLauncher.setGameActive(true);
+                gameLauncher.getNavigationPanel().getPlayOrPauseButton().doClick();
+            }
         }else if (eventType.equals("updateGameSession")){
             PvPGameSession pvPGameSession = PvPGameSession.deserialize(jsonNode.get("pvPGameModel").asText());
             gameLauncher.updatePvPGameSession(pvPGameSession);

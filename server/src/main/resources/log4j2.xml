@@ -11,12 +11,12 @@
     </Appenders>
 
     <Loggers>
-        <Logger name="org.example.server.service.PvPGameSession" level="debug" additivity="false">
-            <AppenderRef ref="FileAppender" />
-        </Logger>
+<!--        <Logger name="org.example.server.service.PvPGameSession" level="debug" additivity="false">-->
+<!--            <AppenderRef ref="FileAppender" />-->
+<!--        </Logger>-->
 
         <Root level="info">
-            <AppenderRef ref="Console" />
+            <AppenderRef ref="FileAppender" />
         </Root>
     </Loggers>
 </Configuration>
