@@ -1,4 +1,4 @@
-package tetris.dataAccessLayer;
+package tetris.model;
 
 import tetris.model.HighScore;
 
@@ -32,13 +32,13 @@ public class HighScoreTableModel extends AbstractTableModel {
     @Override
     public Object getValueAt(int rowIndex, int columnIndex) {
         if (columnIndex == 0){
-            return highScore.scoreList().get(rowIndex).user();
+            return highScore.scoreList().get(rowIndex).getUsername();
         }else if (columnIndex == 1){
-            return highScore.scoreList().get(rowIndex).score();
+            return highScore.scoreList().get(rowIndex).getScore();
         }else if (columnIndex == 2) {
-            return highScore.scoreList().get(rowIndex).level();
+            return highScore.scoreList().get(rowIndex).getLevel();
         }else{
-            return highScore.scoreList().get(rowIndex).lines();
+            return highScore.scoreList().get(rowIndex).getLines();
         }
     }
 }

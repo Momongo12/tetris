@@ -163,6 +163,7 @@ public class PvPGameModel implements GameModel {
     private void endGame(String playerSessionId) {
         gamePanel.displayGameOverPanel(playerSessionId);
         if (playerSessionId.equals(getOwnSessionId())){
+            System.out.println(gameLauncher.getCurrentPlayer().getName() + getScore(playerSessionId) + getLines(playerSessionId) + getLevel(playerSessionId));
             gameLauncher.getNavigationPanel().getPlayOrPauseButton().doClick();
             gameLauncher.updateStatisticPlayer(getScore(playerSessionId), getLines(playerSessionId), getLevel(playerSessionId));
         }

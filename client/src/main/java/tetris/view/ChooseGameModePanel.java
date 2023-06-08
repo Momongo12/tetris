@@ -35,12 +35,14 @@ public class ChooseGameModePanel extends JPanel {
         soloGameButton.setBackground(new Color(0, 0, 0, 0));
         soloGameButton.setFocusable(false);
         soloGameButton.setOpaque(false);
+        soloGameButton.setBorder(null);
         soloGameButton.addActionListener(event -> launcherController.handleSoloGameButtonClick());
 
         JButton pvpGameButton = new JButton(getImg("pvpGameButton.png", 350, 75));
         pvpGameButton.setBackground(new Color(0, 0, 0, 0));
         pvpGameButton.setFocusable(false);
         pvpGameButton.setOpaque(false);
+        pvpGameButton.setBorder(null);
         pvpGameButton.addActionListener(e -> launcherController.handlePvpGameButtonClick());
 
         add(createPanelOffset(1000, 100));

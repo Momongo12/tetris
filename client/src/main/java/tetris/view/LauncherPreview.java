@@ -26,7 +26,6 @@ public class LauncherPreview extends JPanel {
     private int width, height, sleep = 0;
     private AnimationPreview animationPreview;
     private Image backImage, iconImage;
-    private static Exit exit;
 
     private GameLauncher gameLauncher;
 
@@ -38,10 +37,10 @@ public class LauncherPreview extends JPanel {
 
     public LauncherPreview(GameLauncher gameLauncher) {
         this.gameLauncher = gameLauncher;
-//        width = 1000 - 150;
-//        height = 700 - 150;
+        width = 1000 - 150;
+        height = 700 - 150;
 //        backImage = getImg("previewBackground.jpg");
-//        iconImage = getImg("Tetris-logo1.png", 60, 50).getImage();
+        iconImage = getImg("Tetris-logo1.png", 60, 50).getImage();
 //
 //        window = new JFrame();
 //        window.setPreferredSize(new Dimension(width + 100, height + 100));
@@ -158,10 +157,8 @@ public class LauncherPreview extends JPanel {
         frame.setBackground(new Color(0, 0, 0, 0));
         animationPreview = new AnimationPreview(1, frame);
         frame.setVisible(true);
-//        frame.setIconImage(iconImage);
+        frame.setIconImage(iconImage);
         frame.add(animationPreview);
-//
-        exit = new Exit();
     }
 
     public class AnimationPreview extends JPanel {
@@ -179,15 +176,10 @@ public class LauncherPreview extends JPanel {
             h = height * i;
             y = height - 40;
             timer = new Timer(0, null);
-            timer.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent arg0) {
-                    action(i);
-                    repaint();
-                }
+            timer.addActionListener(arg0 -> {
+                action(i);
+                repaint();
             });
-
-            exit = new Exit();
             timer.start();
         }
 
@@ -200,9 +192,7 @@ public class LauncherPreview extends JPanel {
                     h = h + height / 50;
                 } else {
                     timer.stop();
-//                    window.setVisible(true);
                     frame.setVisible(false);
-//                    nextButton.setEnabled(true);
                 }
             }
 
@@ -226,98 +216,11 @@ public class LauncherPreview extends JPanel {
             }
         }
 
-//        @Override
-//        public void paintComponent(Graphics g) {
-//            super.paintComponent(g);// clear and repaint
-//            g.drawImage(backImage, 50 + (width - w) / 2, (height - h) / 2 + 40, w, h, this);
-//            g.drawImage(img, 50 + (width - w1) / 2, y, w1, h1, this);
-//        }
-    }
-
-    public class Exit extends JDialog {
-        JButton noButton, yesButton, exitBarButton;
-
-        public Exit() {
-            setTitle("Exit");
-            setUndecorated(true);
-            setPreferredSize(new Dimension(700, 250));
-            setSize(getPreferredSize());
-            setBackground(new Color(0, 0, 0, 0));
-            setLocationRelativeTo(null);
-            setLayout(new FlowLayout());
-
-            JLabel txt = new JLabel("  Do you really want to exit ?         ");
-            txt.setFont(new Font("World of Water", Font.HANGING_BASELINE, 45));
-            txt.setForeground(Color.black);
-            txt.setLocation(0, 30);
-
-            noButton = new JButton(getImg("no.png", 100, 100));
-            noButton.setBackground(null);
-            noButton.setFocusable(true);
-
-            yesButton = new JButton(getImg("yes.png", 100, 100));
-            yesButton.setBackground(null);
-            yesButton.setFocusable(true);
-
-            noButton.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent ev) {
-                    exit.setVisible(false);
-                }
-            });
-            yesButton.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent ev) {
-                    System.exit(0);
-                }
-            });
-
-            JPanel panel = new JPanel();
-            panel.setPreferredSize(new Dimension(650, 200));
-            panel.setSize(panel.getPreferredSize());
-            panel.setBackground(Color.darkGray);
-            panel.setBorder(BorderFactory.createBevelBorder(0, Color.black, Color.black));// gray));
-            panel.add(txt);
-            panel.add(noButton);
-            panel.add(yesButton);
-
-            exitBarButton = new JButton(" ");
-            exitBarButton.setIcon(new ImageIcon(getImg("cancel.png")));
-            exitBarButton.setBackground(null);
-            exitBarButton.setBorder(null);
-            exitBarButton.setFocusable(false);
-            exitBarButton.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent arg0) {
-                    setVisible(false);
-                    revalidate();
-                }
-            });
-
-            JLabel label = new JLabel("   Exit");
-            label.setFont(new Font("Showcard Gothic", Font.PLAIN, 23));
-            label.setForeground(Color.WHITE);
-            label.setBackground(null);
-            label.setOpaque(false);
-
-            JPanel barPanel = new JPanel();
-            barPanel.setPreferredSize(new Dimension(700, 40));
-            barPanel.setSize(barPanel.getPreferredSize());
-            barPanel.setLayout(new BorderLayout());
-            barPanel.add(exitBarButton, BorderLayout.EAST);// WEST
-            barPanel.add(label, BorderLayout.WEST);
-            barPanel.setBackground(new Color(18, 30, 49));// 18,30,49//54, 64, 69
-            barPanel.setBorder(BorderFactory.createBevelBorder(0, new Color(18, 30, 49), Color.black));
-
-            add(barPanel);
-            add(panel);
-
-            validate();
-            setVisible(false);
+        @Override
+        public void paintComponent(Graphics g) {
+            super.paintComponent(g);// clear and repaint
+            g.drawImage(backImage, 50 + (width - w) / 2, (height - h) / 2 + 40, w, h, this);
+            g.drawImage(img, 50 + (width - w1) / 2, y, w1, h1, this);
         }
-    }
-
-    public static Exit getExit() {
-        return exit;
     }
 }

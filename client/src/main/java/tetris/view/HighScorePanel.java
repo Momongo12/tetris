@@ -1,7 +1,8 @@
 package tetris.view;
 
-import tetris.dataAccessLayer.HighScoreDataAccessObject;
-import tetris.dataAccessLayer.HighScoreTableModel;
+import tetris.controller.LauncherController;
+import tetris.model.HighScoreTableModel;
+import tetris.model.GameLauncher;
 import tetris.model.HighScore;
 
 import static tetris.resource.ResourceManager.*;
@@ -10,19 +11,20 @@ import javax.swing.*;
 import javax.swing.plaf.basic.BasicScrollBarUI;
 import javax.swing.table.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.util.ArrayList;
 
 public class HighScorePanel extends JPanel {
     private static final int TABLE_WIDTH = 500;
     private static final int TABLE_HEIGHT = 200;
 
+    private final LauncherController launcherController;
+    private final GameLauncher gameLauncher;
     private HighScoreTableModel tableModel;
 
     private JTable table;
 
-    public HighScorePanel() {
+    public HighScorePanel(GameLauncher gameLauncher, LauncherController launcherController) {
+        this.gameLauncher = gameLauncher;
+        this.launcherController = launcherController;
         setPreferredSize(new Dimension(1000, 700));
         setSize(getPreferredSize());
         setLayout(new FlowLayout());
@@ -42,18 +44,7 @@ public class HighScorePanel extends JPanel {
         updateTableButton.setBackground(new Color(0, 0, 0, 0));
         updateTableButton.setOpaque(false);
         updateTableButton.setBorder(null);
-        updateTableButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                try {
-                    HighScore highScore = HighScoreDataAccessObject.getHighScoreDataFromDB();
-                    tableModel.updateHighScoreData(highScore);
-                    table.updateUI();
-                } catch (Exception err) {
-                    System.out.println(err.getMessage());
-                }
-            }
-        });
+        updateTableButton.addActionListener((event) -> launcherController.handleHighScoresTableUpdateButtonClick(table, tableModel));
 
         JPanel panelOffset2 = new JPanel();
         panelOffset2.setOpaque(false);
@@ -96,12 +87,7 @@ public class HighScorePanel extends JPanel {
     }
 
     private JTable createTable() {
-        HighScore highScore = new HighScore(new ArrayList<>());
-        try {
-            highScore = HighScoreDataAccessObject.getHighScoreDataFromDB();
-        } catch (Exception e) {
-            System.err.println(e.getMessage());
-        }
+        HighScore highScore = gameLauncher.getHighScore();
 
         tableModel = new HighScoreTableModel(highScore);
 

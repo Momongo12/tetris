@@ -19,6 +19,7 @@ public class LauncherView extends JFrame {
     private JPanel barPanelButton;
     private JPanel inter;
     private JTabbedPane tabbedPane;
+    private final ExitPanel exitPanel;
 
     private boolean maximized;
 
@@ -33,7 +34,6 @@ public class LauncherView extends JFrame {
     public static GamePanel gamePanel;
     public GameLauncher gameLauncher;
     private LauncherController launcherController;
-    private RegistrationPanel registrationPanel;
     private LoginAndRegister loginAndRegisterPanel;
     private UserProfilePanel userProfilePanel;
 
@@ -47,12 +47,9 @@ public class LauncherView extends JFrame {
         gamePanel.setBackImage(getImg("background6.jpg"));
 
         menuPause = new MenuPause(gameLauncher);
-
         chooseGameModePanel = new ChooseGameModePanel(gameLauncher, launcherController);
-
         chooseLevelPanel = new ChooseLevelPanel(gameLauncher);
-
-        registrationPanel = new RegistrationPanel(gameLauncher);
+        exitPanel = new ExitPanel();
 
         barPanel = new JPanel();
 
@@ -64,7 +61,7 @@ public class LauncherView extends JFrame {
         exitButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                LauncherPreview.getExit().setVisible(true);
+                exitPanel.setVisible(true);
             }
         });
 
@@ -121,7 +118,7 @@ public class LauncherView extends JFrame {
         inter = new JPanel();
 
         AboutMeInfoPanel aboutMeInfoPanel = new AboutMeInfoPanel();
-        HighScorePanel highScorePanel = new HighScorePanel();
+        HighScorePanel highScorePanel = new HighScorePanel(gameLauncher, launcherController);
         userProfilePanel = new UserProfilePanel(gameLauncher);
 
         option = new Option(gameLauncher);
@@ -170,14 +167,12 @@ public class LauncherView extends JFrame {
         add(barPanel, BorderLayout.NORTH);
         add(inter, BorderLayout.CENTER);
         setFocusable(true);
+        setVisible(false);
         validate();
-        setVisible(true);
-
     }
 
     private void maximizerButtonMouseClicked(MouseEvent evt) {
         if (!maximized) {
-            // handle fullscreen - taskbar
             setExtendedState(JFrame.MAXIMIZED_BOTH);
             GraphicsEnvironment env = GraphicsEnvironment.getLocalGraphicsEnvironment();
             setMaximizedBounds(env.getMaximumWindowBounds());

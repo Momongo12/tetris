@@ -35,11 +35,7 @@ public class SoloGameModel implements GameModel {
 
     private GameLauncher gameLauncher;
     private GamePanel gamePanel;
-    private InfoPanel infoPanel;
-    private NextShapePanel nextShapePanel;
-    private HoldPanel holdPanel;
     private GameMatrix gameMatrix;
-    private LevelPanel levelPanel;
 
     private Color boardColor = new Color(20, 40, 60);
     private boolean gameOver;

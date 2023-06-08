@@ -31,12 +31,14 @@ public class MenuPause extends JPanel implements ActionListener {
         resumeButton.setIcon(getImg("resume.png", 500, 100));
         resumeButton.setBackground(new Color(0, 0, 0, 0));
         resumeButton.setOpaque(false);
+        resumeButton.setBorder(null);
         resumeButton.addActionListener(this);
 
         restartButton = new JButton();
         restartButton.setIcon(getImg("restart.png", 500, 100));
         restartButton.setBackground(new Color(0, 0, 0, 0));
         restartButton.setOpaque(false);
+        restartButton.setBorder(null);
         restartButton.addActionListener(this);
 
         addOffset(210);

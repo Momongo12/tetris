@@ -37,18 +37,21 @@ public class ChooseLevelPanel extends JPanel implements ActionListener{
         easyLevelButton.setFocusable(false);
         easyLevelButton.setOpaque(false);
         easyLevelButton.addActionListener(this);
+        easyLevelButton.setBorder(null);
 
         mediumLevelButton = new JButton(getImg("medium.png", getWidth() * 9 / 20, getHeight() / 12));
         mediumLevelButton.setBackground(new Color(0, 0, 0, 0));
         mediumLevelButton.setFocusable(false);
         mediumLevelButton.setOpaque(false);
         mediumLevelButton.addActionListener(this);
+        mediumLevelButton.setBorder(null);
 
         hardLevelButton = new JButton(getImg("hard.png", getWidth() * 9 / 20, getHeight() / 12));
         hardLevelButton.setBackground(new Color(0, 0, 0, 0));
         hardLevelButton.setFocusable(false);
         hardLevelButton.setOpaque(false);
         hardLevelButton.addActionListener(this);
+        hardLevelButton.setBorder(null);
 
         addChooseLevelButtons();
     }

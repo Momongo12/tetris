@@ -8,14 +8,16 @@ import org.apache.logging.log4j.Logger;
 import tetris.controller.LauncherController;
 import tetris.controller.TetrominoController;
 import tetris.controller.WebSocketClient;
-import tetris.dataAccessLayer.PlayerStatisticsTableDataAccessObject;
 import tetris.logger.MyLoggerFactory;
 import tetris.resource.ResourceManager;
 import tetris.service.AuthService;
+import tetris.service.HighScoresService;
 import tetris.service.PlayerStatsService;
 import tetris.service.impl.AuthServiceImpl;
+import tetris.service.impl.HighScoresServiceImpl;
 import tetris.service.impl.PlayerStatsServiceImpl;
 import tetris.view.GamePanel;
+import tetris.view.LauncherPreview;
 import tetris.view.LauncherView;
 import tetris.view.NavigationPanel;
 
@@ -34,6 +36,7 @@ public class GameLauncher {
     private GamePanel gamePanel;
     private PlayerStatsService playerStatsService;
     private AuthService authService;
+    private HighScoresService highScoresService;
     private boolean isGameActive = false;
     private SwingWorker<Void, Void> worker;
 
@@ -50,11 +53,11 @@ public class GameLauncher {
 
         initServices();
 
-        launcherController = new LauncherController(this, authService, playerStatsService);
+        launcherController = new LauncherController(this, authService, playerStatsService, highScoresService);
         launcherView = new LauncherView(this, launcherController);
         launcherView.addKeyListener(tetrominoController);
 
-//        new LauncherPreview(this);
+        new LauncherPreview(this);
 
         initBackgroundSounds();
         LOGGER.info("Launcher started");
@@ -63,6 +66,7 @@ public class GameLauncher {
     private void initServices() {
         this.authService = new AuthServiceImpl();
         this.playerStatsService = new PlayerStatsServiceImpl();
+        this.highScoresService = new HighScoresServiceImpl();
     }
 
     private void initBackgroundSounds(){
@@ -97,21 +101,21 @@ public class GameLauncher {
             arrayOfSounds[soundIndex].start();
             backgroundMusicIsDisable = false;
         }
-//        worker = new SwingWorker<>() {
-//            @Override
-//            protected Void doInBackground(){
-//                gameModel.startGame();
-//                return null;
-//            }
-//        };
-//        worker.execute();
-        gameModel.startGame();
+        worker = new SwingWorker<>() {
+            @Override
+            protected Void doInBackground(){
+                gameModel.startGame();
+                return null;
+            }
+        };
+        worker.execute();
         LOGGER.info("Game started");
     }
 
     public void restartGame(){
         if (gameModel instanceof SoloGameModel) {
             ((SoloGameModel) gameModel).refreshGameData();
+            launcherView.displayChooseGameModePanel();
         }else {
             if (isGameActive) {
                 webSocketClient.close();
@@ -236,13 +240,13 @@ public class GameLauncher {
         }
     }
 
-    public void setCurrentPlayer(String username){
-        currentPlayer = PlayerStatisticsTableDataAccessObject.getPlayerStatistics(username);
-        if (currentPlayer == null){
-            currentPlayer = new Player("Unknown", 1);
-        }
-        LOGGER.info("Player log in");
-    }
+//    public void setCurrentPlayer(String username){
+//        currentPlayer = PlayerStatisticsTableDataAccessObject.getPlayerStatistics(username);
+//        if (currentPlayer == null){
+//            currentPlayer = new Player("Unknown", 1);
+//        }
+//        LOGGER.info("Player log in");
+//    }
 
     public void setCurrentPlayer(Player player) {
         currentPlayer = player;
@@ -270,5 +274,9 @@ public class GameLauncher {
 
     public Player getCurrentPlayer() {
         return currentPlayer;
+    }
+
+    public HighScore getHighScore() {
+        return highScoresService.getHighScores();
     }
 }

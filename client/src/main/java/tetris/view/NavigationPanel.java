@@ -25,6 +25,7 @@ public class NavigationPanel extends JPanel implements ActionListener {
         playOrPauseButton.setIcon(getImg("play.png", 30, 30));
         playOrPauseButton.setBackground(new Color(0, 0, 0, 0));
         playOrPauseButton.setOpaque(false);
+        playOrPauseButton.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
         playOrPauseButton.setFocusable(false);
         playOrPauseButton.addActionListener(this);
 
@@ -33,12 +34,14 @@ public class NavigationPanel extends JPanel implements ActionListener {
         enableORDisableBackgroundMusicButton.setBackground(new Color(0, 0, 0, 0));
         enableORDisableBackgroundMusicButton.setOpaque(false);
         enableORDisableBackgroundMusicButton.setFocusable(false);
+        enableORDisableBackgroundMusicButton.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
         enableORDisableBackgroundMusicButton.addActionListener(this);
 
         menuButton = new JButton();
         menuButton.setBackground(new Color(0, 0, 0, 0));
         menuButton.setOpaque(false);
         menuButton.setFocusable(false);
+        menuButton.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
         menuButton.setIcon(getImg("menu.png", 30, 30));
         menuButton.addActionListener(this);
 

@@ -1,11 +1,9 @@
 package tetris.model;
 
-import java.util.ArrayList;
+import java.util.List;
 
-public record HighScore(ArrayList<ScoreEntry> scoreList) {
+public record HighScore(List<ScoreEntry> scoreList) {
     public void addScoreEntry(String user, int score, int level, int lines) {
         scoreList.add(new ScoreEntry(user, score, level, lines));
     }
-
-    public record ScoreEntry(String user, int score, int level, int lines) {}
 }
