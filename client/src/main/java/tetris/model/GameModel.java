@@ -1,9 +1,14 @@
 package tetris.model;
 
+
 import tetris.view.*;
 
 import java.util.ArrayList;
 
+/**
+ * @author denMoskvin
+ * @version 1.0
+ */
 public interface GameModel {
 
     void startGame();

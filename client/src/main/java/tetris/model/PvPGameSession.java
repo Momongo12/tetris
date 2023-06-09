@@ -4,12 +4,18 @@ package tetris.model;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.Data;
+import lombok.extern.log4j.Log4j2;
 import tetris.view.Square;
 
 import java.util.ArrayList;
 import java.util.UUID;
 
+/**
+ * @author denMoskvin
+ * @version 1.0
+ */
 @Data
+@Log4j2
 public class PvPGameSession {
     private String sessionId;
     private final String player1SessionId;
@@ -51,7 +57,7 @@ public class PvPGameSession {
         try {
             return objectMapper.writeValueAsString(this);
         } catch (JsonProcessingException e) {
-            e.printStackTrace();
+            log.error(e.getStackTrace());
         }
         return null;
     }
@@ -61,7 +67,7 @@ public class PvPGameSession {
         try {
             return objectMapper.readValue(json, PvPGameSession.class);
         } catch (JsonProcessingException e) {
-            e.printStackTrace();
+            log.error(e.getStackTrace());
         }
         return null;
     }

@@ -1,5 +1,10 @@
 package tetris.model;
 
+
+/**
+ * @author denMoskvin
+ * @version 1.0
+ */
 public enum TetrominoType {
     I(new boolean[][]{
             {true, true, true, true},

@@ -2,8 +2,7 @@ package tetris.model;
 
 import static tetris.util.TetrisConstants.*;
 
-import org.apache.logging.log4j.Logger;
-import tetris.logger.MyLoggerFactory;
+import lombok.extern.log4j.Log4j2;
 import tetris.resource.ResourceManager;
 import tetris.view.*;
 
@@ -12,7 +11,11 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.UUID;
 
-
+/**
+ * @author denMoskvin
+ * @version 1.0
+ */
+@Log4j2
 public class SoloGameModel implements GameModel {
     private final int stepIncremetialOfGameSpeed = 200;
     private final int initialGameSpeed = 1000;
@@ -23,21 +26,19 @@ public class SoloGameModel implements GameModel {
     private int score = 0;
     private int lines = 0;
 
-    private static final Logger LOGGER = MyLoggerFactory.getLogger(SoloGameModel.class);
-
     private ArrayList<Square[]> board;
-    private TetrominoFactory tetrominoFactory;
+    private final TetrominoFactory tetrominoFactory;
 
     private Tetromino tetromino;
     private Tetromino nextTetromino;
     private boolean isHoldTetromino = false;
     private Tetromino holdTetromino;
 
-    private GameLauncher gameLauncher;
+    private final GameLauncher gameLauncher;
     private GamePanel gamePanel;
     private GameMatrix gameMatrix;
 
-    private Color boardColor = new Color(20, 40, 60);
+    private final Color boardColor = new Color(20, 40, 60);
     private boolean gameOver;
     private boolean gameIsActive;
 
@@ -88,10 +89,10 @@ public class SoloGameModel implements GameModel {
             ((FloatControl) rotateSound.getControl(FloatControl.Type.MASTER_GAIN)).setValue(-20f);
             ((FloatControl) dropSound.getControl(FloatControl.Type.MASTER_GAIN)).setValue(-20f);
 
-            LOGGER.debug("Game sounds loaded");
+            log.debug("Game sounds loaded");
 
         } catch (Exception ex) {
-            LOGGER.error("Game sound initialization error", ex);
+            log.error("Game sound initialization error", ex);
         }
 
     }
@@ -150,7 +151,7 @@ public class SoloGameModel implements GameModel {
         nextTetromino = tetrominoFactory.getNextTetromino();
         gamePanel.deleteGameOverPanelAndAddGameMatrix(gameMatrix);
 
-        LOGGER.debug("game data refreshed");
+        log.debug("game data refreshed");
     }
 
     private void endGame() {
@@ -178,14 +179,14 @@ public class SoloGameModel implements GameModel {
         }
         removeFilledLines();
         gamePanel.repaint();
-        LOGGER.trace("Tetromino moved");
+        log.trace("Tetromino moved");
     }
 
     public void rotateTetromino() {
         rotateSound.start();
         tetromino.rotate(board, boardColor);
         gamePanel.repaint();
-        LOGGER.trace("Tetromino rotated");
+        log.trace("Tetromino rotated");
     }
 
     public void holdTetromino() {
@@ -201,7 +202,7 @@ public class SoloGameModel implements GameModel {
             gamePanel.repaint();
             isHoldTetromino = true;
         }
-        LOGGER.trace("Tetromino holded");
+        log.trace("Tetromino holded");
     }
 
     private void removeFilledLines() {
@@ -227,7 +228,7 @@ public class SoloGameModel implements GameModel {
             case (3) -> score += 700;
             case (4) -> score += 1500;
         }
-        LOGGER.trace("filed line removed");
+        log.trace("filed line removed");
     }
 
     private boolean tetrominoIsTouchWall(Tetromino tetromino, int direction) {
@@ -251,7 +252,7 @@ public class SoloGameModel implements GameModel {
                 return true;
             }
         }
-        LOGGER.trace("Tetromino touched ground");
+        log.trace("Tetromino touched ground");
         return false;
     }
 

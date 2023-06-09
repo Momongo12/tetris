@@ -9,6 +9,10 @@ import java.net.HttpURLConnection;
 
 import static tetris.util.ServiceUtil.*;
 
+/**
+ * @author denMoskvin
+ * @version 1.0
+ */
 @Log4j2
 public class PlayerStatsServiceImpl implements PlayerStatsService {
     private static final String PLAYER_STATISTIC_SERVER_BASE_URL = "http://localhost:8081/api/statistics/";

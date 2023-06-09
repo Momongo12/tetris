@@ -12,6 +12,11 @@ import java.util.List;
 import static tetris.util.ServiceUtil.createConnection;
 import static tetris.util.ServiceUtil.readResponse;
 
+
+/**
+ * @author denMoskvin
+ * @version 1.0
+ */
 @Log4j2
 public class HighScoresServiceImpl implements HighScoresService {
 

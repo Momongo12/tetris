@@ -5,6 +5,8 @@ import tetris.model.dto.RegistrationRequestDto;
 
 /**
  * The AuthService interface provides methods for authentication and player registration.
+ * @author denMoskvin
+ * @version 1.0
  */
 public interface AuthService {
     /**

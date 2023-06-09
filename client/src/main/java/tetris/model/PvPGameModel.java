@@ -3,9 +3,8 @@ package tetris.model;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import org.apache.logging.log4j.Logger;
+import lombok.extern.log4j.Log4j2;
 import tetris.controller.WebSocketClient;
-import tetris.logger.MyLoggerFactory;
 import tetris.resource.ResourceManager;
 import tetris.view.*;
 
@@ -20,8 +19,12 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 import static tetris.util.TetrisConstants.*;
 
+/**
+ * @author denMoskvin
+ * @version 1.0
+ */
+@Log4j2
 public class PvPGameModel implements GameModel {
-    private static final Logger LOGGER = MyLoggerFactory.getLogger(SoloGameModel.class);
 
     public static final int ROWS = 20;
     public static final int COLUMNS = 10;
@@ -30,8 +33,6 @@ public class PvPGameModel implements GameModel {
     private final GameLauncher gameLauncher;
     private PvPGameSession pvPGameSession;
     private final WebSocketClient webSocketClient;
-    private SwingWorker<Void, Void> worker1;
-    private SwingWorker<Void, Void> worker2;
 
     private GamePanel gamePanel;
 
@@ -79,19 +80,19 @@ public class PvPGameModel implements GameModel {
             ((FloatControl) rotateSound.getControl(FloatControl.Type.MASTER_GAIN)).setValue(-20f);
             ((FloatControl) dropSound.getControl(FloatControl.Type.MASTER_GAIN)).setValue(-20f);
 
-            LOGGER.debug("Game sounds loaded");
+            log.debug("Game sounds loaded");
 
         } catch (Exception ex){
-            LOGGER.error("Game sound initialization error", ex);
+            log.error("Game sound initialization error", ex);
         }
 
     }
 
 
     public void startGame() {
-        worker1 = new SwingWorker<>() {
+        SwingWorker<Void, Void> worker1 = new SwingWorker<>() {
             @Override
-            protected Void doInBackground(){
+            protected Void doInBackground() {
                 while (!pvPGameSession.isGameOverPlayer1()) {
                     try {
                         Thread.sleep(pvPGameSession.getGameSpeed() / 2);
@@ -104,41 +105,9 @@ public class PvPGameModel implements GameModel {
                 return null;
             }
         };
-
-//        Thread thread1 = new Thread(() -> {
-//            System.out.println("start 1");
-//            while (!pvPGameSession.isGameOverPlayer1()) {
-//                try {
-//                    Thread.sleep(pvPGameSession.getGameSpeed() / 2);
-//                } catch (Exception e) {
-//                    e.printStackTrace();
-//                }
-//                gamePanel.repaint();
-//            }
-//            endGame(pvPGameSession.getPlayer1SessionId());
-//            System.out.println("end 1");
-//        });
-//        thread1.start();
-//
-//        Thread thread2 = new Thread(() -> {
-//            System.out.println("start 2");
-//            while (!pvPGameSession.isGameOverPlayer2()) {
-//                try {
-//                    Thread.sleep(pvPGameSession.getGameSpeed() / 2);
-//                } catch (Exception e) {
-//                    e.printStackTrace();
-//                }
-//                gamePanel.repaint();
-//            }
-//            System.out.println("end 2");
-//            endGame(pvPGameSession.getPlayer2SessionId());
-//        });
-//        thread2.start();
-
-
-        worker2 = new SwingWorker<>() {
+        SwingWorker<Void, Void> worker2 = new SwingWorker<>() {
             @Override
-            protected Void doInBackground(){
+            protected Void doInBackground() {
                 while (!pvPGameSession.isGameOverPlayer2()) {
                     try {
                         Thread.sleep(pvPGameSession.getGameSpeed() / 2);

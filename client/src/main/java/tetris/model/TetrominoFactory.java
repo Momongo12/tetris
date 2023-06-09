@@ -6,9 +6,13 @@ import java.util.Collections;
 import java.util.LinkedList;
 import java.util.Random;
 
+/**
+ * @author denMoskvin
+ * @version 1.0
+ */
 public class TetrominoFactory {
-    private LinkedList<TetrominoType> queue;
-    private Color[] colors = {new Color(255, 0, 0),  new Color(0, 128, 0), new Color(0,0, 255), new Color(0, 255, 255),
+    private final LinkedList<TetrominoType> queue;
+    private final Color[] colors = {new Color(255, 0, 0),  new Color(0, 128, 0), new Color(0,0, 255), new Color(0, 255, 255),
                                 new Color(255, 0, 255), new Color(255, 255, 0), new Color(128, 128, 128)};
     Random colorRandomIndex;
 

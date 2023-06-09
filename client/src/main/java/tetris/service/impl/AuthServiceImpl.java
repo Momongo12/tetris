@@ -10,6 +10,11 @@ import static tetris.util.ServiceUtil.*;
 import java.io.IOException;
 import java.net.HttpURLConnection;
 
+
+/**
+ * @author denMoskvin
+ * @version 1.0
+ */
 @Log4j2
 public class AuthServiceImpl implements AuthService {
 

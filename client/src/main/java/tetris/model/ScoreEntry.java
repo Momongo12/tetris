@@ -7,6 +7,10 @@ import lombok.Data;
 
 import java.util.List;
 
+/**
+ * @author denMoskvin
+ * @version 1.0
+ */
 @Data
 public class ScoreEntry {
     private String username;

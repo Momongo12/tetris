@@ -17,6 +17,10 @@ import java.awt.*;
 import java.io.IOException;
 import java.util.ArrayList;
 
+/**
+ * @author denMoskvin
+ * @version 1.0
+ */
 public class Tetromino {
     private TetrominoType type;
     private boolean[][] shape;
@@ -132,7 +136,6 @@ public class Tetromino {
         public ColorDeserializer() {
             super(Color.class);
         }
-
         @Override
         public Color deserialize(JsonParser p, DeserializationContext ctxt) throws IOException {
             TreeNode root = p.getCodec().readTree(p);
@@ -140,8 +143,7 @@ public class Tetromino {
             if (rgba != null) {
                 return new Color(Integer.parseUnsignedInt(rgba.textValue(), 16), true);
             } else {
-                // Return a default color value if rgba is null
-                return Color.BLACK; // Or any other default color of your choice
+                return Color.BLACK;
             }
         }
     }

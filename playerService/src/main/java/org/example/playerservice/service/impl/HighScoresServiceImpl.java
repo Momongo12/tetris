@@ -39,9 +39,7 @@ public class HighScoresServiceImpl implements HighScoresService {
 
             if (playerStatistic.getMaxScore() > highScore.getMaxScore()) {
                 highScore.setMaxScore(playerStatistic.getMaxScore());
-            }else if (playerStatistic.getMaxLevel() > highScore.getMaxLevel()) {
                 highScore.setMaxLevel(playerStatistic.getMaxLevel());
-            }else if (playerStatistic.getMaxLines() > highScore.getMaxLines()) {
                 highScore.setMaxLines(playerStatistic.getMaxLines());
             }
         }else {

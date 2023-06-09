@@ -1,8 +1,8 @@
 package tetris.resource;
 
 
-import org.apache.logging.log4j.Logger;
-import tetris.logger.MyLoggerFactory;
+import lombok.extern.log4j.Log4j2;
+
 
 import javax.sound.sampled.*;
 import javax.swing.*;
@@ -12,8 +12,12 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 import java.net.URL;
 
+/**
+ * @author denMoskvin
+ * @version 1.0
+ */
+@Log4j2
 public class ResourceManager {
-    private static final Logger LOGGER = MyLoggerFactory.getLogger(ResourceManager.class);
     private static final String PATH_TO_ROOT_IMAGE_FOLDER = "static/img/";
     private static final String PATH_TO_ROOT_SOUNDS_FOLDER = "static/sounds/";
 
@@ -21,7 +25,7 @@ public class ResourceManager {
         try {
             return new ImageIcon(ResourceManager.class.getClassLoader().getResource(PATH_TO_ROOT_IMAGE_FOLDER + imageName)).getImage();
         } catch (Exception e) {
-            LOGGER.error("Error: image {\"" + imageName + "\"} not found: ", e);
+            log.error("Error: image {\"" + imageName + "\"} not found: ", e);
         }
         return null;
     }
@@ -30,7 +34,7 @@ public class ResourceManager {
         try {
             return new ImageIcon(getImg(imageName).getScaledInstance(width, height, Image.SCALE_SMOOTH));
         } catch (Exception e) {
-            LOGGER.error("Error: image {\"" + imageName + "\"} not found: ", e);
+            log.error("Error: image {\"" + imageName + "\"} not found: ", e);
         }
         return null;
     }

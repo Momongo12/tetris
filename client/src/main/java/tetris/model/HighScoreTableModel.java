@@ -1,10 +1,12 @@
 package tetris.model;
 
-import tetris.model.HighScore;
 
 import javax.swing.table.AbstractTableModel;
-import java.util.ArrayList;
 
+/**
+ * @author denMoskvin
+ * @version 1.0
+ */
 public class HighScoreTableModel extends AbstractTableModel {
     private static final String[] COLUMN_NAMES = {"Player", "Score", "Level", "Lines"};
     private HighScore highScore;

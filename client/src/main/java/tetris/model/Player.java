@@ -7,6 +7,10 @@ import lombok.Data;
 import java.util.Date;
 import java.util.LinkedHashMap;
 
+/**
+ * @author denMoskvin
+ * @version 1.0
+ */
 @Data
 public class Player {
     private int playerIdInDB;
@@ -39,7 +43,7 @@ public class Player {
         return map;
     }
 
-    public void updateStatisticPlayer(int currentScore, int currentLines, int currentLevel){
+    public void updateStatistic(int currentScore, int currentLines, int currentLevel){
         maxScore = Math.max(currentScore, maxScore);
         maxLevel = Math.max(currentLevel, maxLevel);
         maxLines = Math.max(currentLines, maxLines);

@@ -3,9 +3,7 @@ package tetris.controller;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ObjectNode;
-import org.apache.logging.log4j.Logger;
-import tetris.logger.MyLoggerFactory;
+import lombok.extern.log4j.Log4j2;
 import tetris.model.GameLauncher;
 import tetris.model.PvPGameSession;
 
@@ -13,9 +11,9 @@ import javax.websocket.*;
 import java.io.IOException;
 import java.net.URI;
 
+@Log4j2
 @ClientEndpoint
 public class WebSocketClient implements MessageHandler.Whole<String>{
-    private static final Logger LOGGER = MyLoggerFactory.getLogger(WebSocketClient.class);
     private GameLauncher gameLauncher;
     private Session session;
 
@@ -28,7 +26,7 @@ public class WebSocketClient implements MessageHandler.Whole<String>{
     @OnOpen
     public void onOpen(Session session) {
         this.session = session;
-        LOGGER.info("WebSocket connection established.");
+        log.info("WebSocket connection established.");
     }
 
     @OnMessage
@@ -73,7 +71,7 @@ public class WebSocketClient implements MessageHandler.Whole<String>{
 
     @OnClose
     public void onClose() {
-        LOGGER.info("WebSocket connection closed.");
+        log.info("WebSocket connection closed.");
     }
 
     public void connect(String serverURI) {

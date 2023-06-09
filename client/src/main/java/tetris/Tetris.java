@@ -1,18 +1,15 @@
 package tetris;
 
-import org.apache.logging.log4j.Logger;
-import tetris.logger.MyLoggerFactory;
+import lombok.extern.log4j.Log4j2;
 import tetris.model.GameLauncher;
 
+@Log4j2
 public class Tetris {
-
-    private static final Logger LOGGER = MyLoggerFactory.getLogger(Tetris.class);
-
     public static void main(String [] args){
         try {
             new GameLauncher();
         } catch (Exception e){
-            LOGGER.fatal("Game Launcher has been crashed");
+            log.fatal("Game Launcher has been crashed");
         }
     }
 }

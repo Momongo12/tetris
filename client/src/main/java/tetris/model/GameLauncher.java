@@ -4,11 +4,10 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import lombok.Data;
-import org.apache.logging.log4j.Logger;
+import lombok.extern.log4j.Log4j2;
 import tetris.controller.LauncherController;
 import tetris.controller.TetrominoController;
 import tetris.controller.WebSocketClient;
-import tetris.logger.MyLoggerFactory;
 import tetris.resource.ResourceManager;
 import tetris.service.AuthService;
 import tetris.service.HighScoresService;
@@ -24,7 +23,12 @@ import tetris.view.NavigationPanel;
 import javax.sound.sampled.*;
 import javax.swing.*;
 
+/**
+ * @author denMoskvin
+ * @version 1.0
+ */
 @Data
+@Log4j2
 public class GameLauncher {
     private NavigationPanel navigationPanel;
     private LauncherController launcherController;
@@ -45,8 +49,6 @@ public class GameLauncher {
     private Clip[] arrayOfSounds;
     private int soundIndex;
 
-    private static final Logger LOGGER = MyLoggerFactory.getLogger(GameLauncher.class);
-
     public GameLauncher(){
         gameModel = new SoloGameModel(this);
         tetrominoController = new TetrominoController(gameModel);
@@ -60,7 +62,7 @@ public class GameLauncher {
         new LauncherPreview(this);
 
         initBackgroundSounds();
-        LOGGER.info("Launcher started");
+        log.info("Launcher started");
     }
 
     private void initServices() {
@@ -85,9 +87,9 @@ public class GameLauncher {
                 });
             }
             soundIndex = 0;
-            LOGGER.debug("background sounds loaded");
+            log.debug("background sounds loaded");
         }catch (Exception ex){
-            LOGGER.error("Init background sounds error", ex);
+            log.error("Init background sounds error", ex);
         }
     }
 
@@ -109,7 +111,7 @@ public class GameLauncher {
             }
         };
         worker.execute();
-        LOGGER.info("Game started");
+        log.info("Game started");
     }
 
     public void restartGame(){
@@ -129,7 +131,7 @@ public class GameLauncher {
 
     public void connectToServer() {
         if (webSocketClient == null) {
-            LOGGER.info("Try connect to server");
+            log.info("Try connect to server");
             webSocketClient = new WebSocketClient(this);
             webSocketClient.connect("ws://localhost:8082/game");
         }
@@ -194,7 +196,7 @@ public class GameLauncher {
             gameModel.pauseGame();
             worker.cancel(false);
         }
-        LOGGER.info("Game stopped");
+        log.info("Game stopped");
     }
 
 
@@ -227,7 +229,7 @@ public class GameLauncher {
 
         worker.execute();
 
-        LOGGER.info("Background music has been updated");
+        log.info("Background music has been updated");
     }
 
     private void playPreviewSound(Clip clip){
@@ -240,22 +242,13 @@ public class GameLauncher {
         }
     }
 
-//    public void setCurrentPlayer(String username){
-//        currentPlayer = PlayerStatisticsTableDataAccessObject.getPlayerStatistics(username);
-//        if (currentPlayer == null){
-//            currentPlayer = new Player("Unknown", 1);
-//        }
-//        LOGGER.info("Player log in");
-//    }
-
     public void setCurrentPlayer(Player player) {
         currentPlayer = player;
     }
 
     public void updateStatisticPlayer(int currentScore, int currentLines, int currentLevel){
-        currentPlayer.updateStatisticPlayer(currentScore, currentLines, currentLevel);
+        currentPlayer.updateStatistic(currentScore, currentLines, currentLevel);
         playerStatsService.updateStatisticPlayer(currentPlayer);
-//        HighScoreDataAccessObject.addHighScoreDataToDB(currentPlayer);
     }
 
     public void setNavigationPanel(NavigationPanel navigationPanel){
