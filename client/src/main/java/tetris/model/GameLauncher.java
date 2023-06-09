@@ -131,7 +131,7 @@ public class GameLauncher {
         if (webSocketClient == null) {
             LOGGER.info("Try connect to server");
             webSocketClient = new WebSocketClient(this);
-            webSocketClient.connect("ws://localhost:8083/game");
+            webSocketClient.connect("ws://localhost:8082/game");
         }
     }
 

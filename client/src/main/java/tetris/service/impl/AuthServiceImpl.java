@@ -13,7 +13,7 @@ import java.net.HttpURLConnection;
 @Log4j2
 public class AuthServiceImpl implements AuthService {
 
-    private static final String AUTHORIZATION_SERVER_BASE_URL = "http://localhost:8082/api/auth";
+    private static final String AUTHORIZATION_SERVER_BASE_URL = "http://localhost:8080/api/auth";
 
     public boolean authenticate(LoginRequestDto loginRequestDto) {
         HttpURLConnection connection = null;
